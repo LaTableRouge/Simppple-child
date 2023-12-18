@@ -14,9 +14,6 @@ The [parent theme](https://github.com/LaTableRouge/Simppple) will be updated oft
 - 📂 **simple-child** (child theme)
   - 📂 [assets](./assets/)
     - Contains assets that will be compiled (scss, js, fonts, img, etc...)
-    - 📂 fonts
-      - 📂 icomoon
-    - 📂 img
     - 📂 js
     - 📂 scss
   - 📂 build
