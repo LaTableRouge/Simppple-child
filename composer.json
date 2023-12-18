@@ -1,0 +1,13 @@
+{
+  "authors": [
+    {
+      "name": "MLNOP",
+      "homepage": "https://mlnop.fr",
+      "role": "Simple man"
+    }
+  ],
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "v3.38.2",
+    "wp-cli/wp-cli-bundle": "v2.9.0"
+  }
+}
