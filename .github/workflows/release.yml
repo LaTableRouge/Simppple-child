@@ -21,7 +21,7 @@ jobs:
         with:
           type: 'zip'
           filename: '${{ env.RELEASE_NAME }}.zip'
-          exclusions: '*.git* *.github* /*node_modules/* /*vendor/* blocks/react/build'
+          exclusions: '*.git* *.github* /*node_modules/* /*vendor/*'
 
       # Publish the release
       - name: Publish release

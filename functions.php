@@ -4,9 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SIMPPPLE_IS_VITE_DEVELOPMENT', false);
-
-define('SIMPPPLE_PICTURE_FOLDER', defined('SIMPPPLE_IS_VITE_DEVELOPMENT') && SIMPPPLE_IS_VITE_DEVELOPMENT ? '/assets/img' : '/build/assets/img');
+define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', false);
 
 /*
  * ================================
@@ -14,13 +12,13 @@ define('SIMPPPLE_PICTURE_FOLDER', defined('SIMPPPLE_IS_VITE_DEVELOPMENT') && SIM
  */
 require get_template_directory() . '/inc/vite.php';
 // Front assets
-simppple_vite_enqueue_script('/assets/js/front.js', 'wp_enqueue_scripts', 'wp_footer');
+simppplechild_vite_enqueue_script('/assets/js/front.js', 'wp_enqueue_scripts', 'wp_footer');
 
 // Admin assets
-simppple_vite_enqueue_script('/assets/js/admin.js', 'admin_enqueue_scripts', 'admin_footer');
+simppplechild_vite_enqueue_script('/assets/js/admin.js', 'admin_enqueue_scripts', 'admin_footer');
 
 // Editor assets
-simppple_vite_enqueue_script('/assets/js/editor.js', 'enqueue_block_editor_assets');
+simppplechild_vite_enqueue_script('/assets/js/editor.js', 'enqueue_block_editor_assets');
 
 // Theme customization
 require get_template_directory() . '/inc/theme-customization/wp_customization.php';

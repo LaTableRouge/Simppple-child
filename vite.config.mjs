@@ -273,8 +273,8 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				resolve(__dirname, 'functions.php'),
 				[
 					{
-						from: /\bdefine\([ ]?'SIMPPPLE_IS_VITE_DEVELOPMENT',[ ]?true[ ]?\);/g,
-						to: "define('SIMPPPLE_IS_VITE_DEVELOPMENT', false);"
+						from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?true[ ]?\);/g,
+						to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', false);"
 					}
 				]
 			)
@@ -283,8 +283,8 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				resolve(__dirname, 'functions.php'),
 				[
 					{
-						from: /\bdefine\([ ]?'SIMPPPLE_IS_VITE_DEVELOPMENT',[ ]?false[ ]?\);/g,
-						to: "define('SIMPPPLE_IS_VITE_DEVELOPMENT', true);"
+						from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?false[ ]?\);/g,
+						to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', true);"
 					}
 				]
 			)

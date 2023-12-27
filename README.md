@@ -7,11 +7,11 @@
 
 Simppple-child is a Wordpress child theme of the [Simppple theme](https://github.com/LaTableRouge/Simppple) designed for developpers. You can use this theme as a sandbox to create your own react/acf blocks or patterns.
 <br>
-The [parent theme](https://github.com/LaTableRouge/Simppple) will be updated often (maybe once a year idk 🤷‍♀️) so don't touch it. If you want to change things in the parent theme, use this one instead to do it.
+The [parent theme](https://github.com/LaTableRouge/Simppple) will be updated often (maybe once a year idk 🤷‍♀️) so don't touch it. If you want to change things in the parent theme, do it here.
 
 ## File Structure
 
-- 📂 **simple-child** (child theme)
+- 📂 **simppple-child** (child theme)
   - 📂 [assets](./assets/)
     - Contains assets that will be compiled (scss, js, fonts, img, etc...)
     - 📂 js
@@ -71,31 +71,31 @@ The list of development scripts is listed below:
 
 ### Overriding Gutenberg Native Blocks
 
-Gutenberg's native editor blocks can be overridden by creating files in the `blocks/core/` ([see README](./blocks/core/README.md)) directory of your theme.
+Gutenberg's native editor blocks can be overridden by creating files in the `blocks/core/` ([see README](./blocks/core/README.md)) directory of the theme.
 
 ### Overriding Woocommerce Native Blocks
 
-Woocommerce's native Gutenberg blocks can be overridden by creating files in the `blocks/woocommerce/` ([see README](./blocks/woocommerce/README.md)) directory of your theme.
+Woocommerce's native Gutenberg blocks can be overridden by creating files in the `blocks/woocommerce/` ([see README](./blocks/woocommerce/README.md)) directory of the theme.
 
 ### Creating ACF Blocks
 
-ACF (Advanced Custom Fields) blocks should be created and edited in the `blocks/acf/` ([see README](./blocks/acf/README.md)) directory of your theme.
+ACF (Advanced Custom Fields) blocks should be created and edited in the `blocks/acf/` ([see README](./blocks/acf/README.md)) directory of the theme.
 
 ### Creating REACT Blocks
 
-React blocks should be created and edited in the `blocks/react/src/` ([see README](./blocks/react/src/README.md)) directory of your theme.
+React blocks should be created and edited in the `blocks/react/src/` ([see README](./blocks/react/src/README.md)) directory of the theme.
 
 ### Creating Patterns
 
-Patterns can be created and edited in the `patterns/` ([see README](./patterns/README.md)) directory of your theme.
+Patterns can be created and edited in the `patterns/` ([see README](./patterns/README.md)) directory of the theme.
 
 ### Creating Parts
 
-Parts can be created and edited in the `parts/` ([see README](./parts/README.md)) directory of your theme.
+Parts can be created and edited in the `parts/` ([see README](./parts/README.md)) directory of the theme.
 
 ### Creating Templates
 
-Templates can be created and edited in the `templates/` ([see README](./templates/README.md)) directory of your theme.
+Templates can be created and edited in the `templates/` ([see README](./templates/README.md)) directory of the theme.
 
 ### Translation
 
