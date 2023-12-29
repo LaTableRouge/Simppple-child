@@ -1,7 +1,7 @@
 <?php
 
 if (function_exists('acf_register_block_type')) {
-    function simppple_acf_blocks_category($categories, $post) {
+    function simppplechild_acf_blocks_category($categories, $post) {
         $category_slugs = wp_list_pluck($categories, 'slug');
 
         return in_array('simpple-blocks', $category_slugs, true) ? $categories : array_merge(
@@ -15,6 +15,6 @@ if (function_exists('acf_register_block_type')) {
             $categories
         );
     }
-    add_filter('block_categories_all', 'simppple_acf_blocks_category', 10, 2);
+    add_filter('block_categories_all', 'simppplechild_acf_blocks_category', 10, 2);
 }
 

@@ -62,9 +62,7 @@
 		"vite-plugin-sass-glob-import": "^3.0.2",
 		"vite-plugin-static-copy": "^1.0.0"
 	},
-	"dependencies": {
-		"gridjs": "^6.0.6"
-	},
+	"dependencies": {},
 	"lint-staged": {
 		"assets/scss/**/*.scss": [
 			"npx stylelint --allow-empty-input --fix",

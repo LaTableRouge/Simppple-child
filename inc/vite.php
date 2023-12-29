@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) {
 
 define('SIMPPPLECHILD_VITE_SERVER', 'http://localhost:5173');
 define('SIMPPPLECHILD_DIST_FOLDER', 'build');
-define('SIMPPPLECHILD_DIST_URI', get_template_directory_uri() . '/' . SIMPPPLECHILD_DIST_FOLDER);
+define('SIMPPPLECHILD_DIST_URI', get_stylesheet_directory_uri() . '/' . SIMPPPLECHILD_DIST_FOLDER);
 define('SIMPPPLECHILD_DIST_PATH', get_template_directory() . '/' . SIMPPPLECHILD_DIST_FOLDER);
 
 function simppplechild_vite_fetch_asset_from_manifest($fileThemePath, $assetType) {
@@ -64,9 +64,9 @@ function simppplechild_vite_enqueue_dev_dependencies() {
                 ajax_url: '" . admin_url('admin-ajax.php') . "',
                 rest_url: '" . esc_url_raw(get_rest_url(null, '/wp/v2')) . "',
                 rest_nonce: '" . wp_create_nonce('wp_rest') . "',
-                template_directory: '" . get_template_directory_uri() . "',
+                template_directory: '" . get_stylesheet_directory_uri() . "',
                 plugins_directory: '" . plugins_url() . "',
-                pictures_directory: '" . get_template_directory_uri() . '/build/assets/img' . "',
+                pictures_directory: '" . get_stylesheet_directory_uri() . '/build/assets/img' . "',
                 posts_per_page: '" . get_option('posts_per_page') . "'
             }
         </script>";
@@ -87,7 +87,7 @@ function simppplechild_vite_enqueue_style($fileThemePath, $hookBuild, $hookDev =
         * ================================ Inject assets in DOM
         * insert link tag for styles
         */
-        $themePath = get_template_directory_uri();
+        $themePath = get_stylesheet_directory_uri();
         $themePath = parse_url($themePath, PHP_URL_PATH);
 
         add_action($hookDev, function () use ($themePath, $fileThemePath) {
@@ -133,7 +133,7 @@ function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev 
         * ================================ Inject assets in DOM
         * insert script tag for scripts
         */
-        $themePath = get_template_directory_uri();
+        $themePath = get_stylesheet_directory_uri();
         $themePath = parse_url($themePath, PHP_URL_PATH);
 
         remove_action($hookDev, 'simppplechild_vite_enqueue_dev_dependencies');
@@ -196,9 +196,9 @@ function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev 
                             'ajax_url' => admin_url('admin-ajax.php'),
                             'rest_url' => esc_url_raw(get_rest_url(null, '/wp/v2')),
                             'rest_nonce' => wp_create_nonce('wp_rest'),
-                            'template_directory' => get_template_directory_uri(),
+                            'template_directory' => get_stylesheet_directory_uri(),
                             'plugins_directory' => plugins_url(),
-                            'pictures_directory' => get_template_directory_uri() . '/build/assets/img',
+                            'pictures_directory' => get_stylesheet_directory_uri() . '/build/assets/img',
                             'posts_per_page' => get_option('posts_per_page'),
                         ]
                     );

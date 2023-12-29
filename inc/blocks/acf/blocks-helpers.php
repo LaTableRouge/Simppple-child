@@ -34,7 +34,7 @@ if (!function_exists('convert_custom_properties')) {
  *  de la configuration back-office
  *
  */
-function simppple_get_block_style_variables($block, $block_slug) {
+function simppplechild_get_block_style_variables($block, $block_slug) {
     $attrs = [];
 
     $themeJSONDatas = wp_get_global_styles(
@@ -168,7 +168,7 @@ function simppple_get_block_style_variables($block, $block_slug) {
  *  de la configuration back-office
  *
  */
-function simppple_get_block_style_inline($block) {
+function simppplechild_get_block_style_inline($block) {
     $attrs = [];
 
     $themeJSONDatas = wp_get_global_styles(
@@ -296,7 +296,7 @@ function simppple_get_block_style_inline($block) {
 /**
  * Récupère les classes du block (réglages back-office)
  */
-function simppple_get_block_class($block) {
+function simppplechild_get_block_class($block) {
     $classes = [];
 
     if (isset($block['align'])) {

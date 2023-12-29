@@ -1,6 +1,6 @@
 <?php
 
-function simppple_register_acf_blocks() {
+function simppplechild_register_acf_blocks() {
     /**
      * Registers the blocks using the metadata loaded from the `block.json` files.
      * Behind the scenes, it registers also all assets so they can be enqueued
@@ -59,5 +59,5 @@ function simppple_register_acf_blocks() {
         }
     }
 }
-add_action('init', 'simppple_register_acf_blocks', 9);
+add_action('init', 'simppplechild_register_acf_blocks', 9);
 
