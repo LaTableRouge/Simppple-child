@@ -11,7 +11,7 @@ function simppplechild_register_acf_blocks() {
      */
 
     // Include all files in the block react folder
-    $dirpath = get_template_directory() . '/blocks/acf/';
+    $dirpath = get_stylesheet_directory() . '/blocks/acf/';
 
     $files = [];
     $files = glob($dirpath . '**/block.json');
@@ -50,7 +50,7 @@ function simppplechild_register_acf_blocks() {
                         wp_set_script_translations(
                             $handle,
                             'simpple-blocks',
-                            get_template_directory() . '/lang'
+                            get_stylesheet_directory() . '/lang'
                         );
                     }
                 }

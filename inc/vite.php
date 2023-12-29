@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 define('SIMPPPLECHILD_VITE_SERVER', 'http://localhost:5173');
 define('SIMPPPLECHILD_DIST_FOLDER', 'build');
 define('SIMPPPLECHILD_DIST_URI', get_stylesheet_directory_uri() . '/' . SIMPPPLECHILD_DIST_FOLDER);
-define('SIMPPPLECHILD_DIST_PATH', get_template_directory() . '/' . SIMPPPLECHILD_DIST_FOLDER);
+define('SIMPPPLECHILD_DIST_PATH', get_stylesheet_directory() . '/' . SIMPPPLECHILD_DIST_FOLDER);
 
 function simppplechild_vite_fetch_asset_from_manifest($fileThemePath, $assetType) {
     $returnedArray = [];
@@ -60,7 +60,7 @@ function simppplechild_vite_enqueue_dev_dependencies() {
     wp_enqueue_script('wp-i18n');
     wp_enqueue_script('wp-blocks');
     echo "<script>
-            const wpparams = {
+            var wpchildparams = {
                 ajax_url: '" . admin_url('admin-ajax.php') . "',
                 rest_url: '" . esc_url_raw(get_rest_url(null, '/wp/v2')) . "',
                 rest_nonce: '" . wp_create_nonce('wp_rest') . "',
@@ -186,12 +186,12 @@ function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev 
                     wp_set_script_translations(
                         $fileSlug,
                         'simppple',
-                        get_template_directory() . '/lang'
+                        get_stylesheet_directory() . '/lang'
                     );
 
                     wp_localize_script(
                         $fileSlug,
-                        'wpparams',
+                        'wpchildparams',
                         [
                             'ajax_url' => admin_url('admin-ajax.php'),
                             'rest_url' => esc_url_raw(get_rest_url(null, '/wp/v2')),

@@ -24,8 +24,9 @@ simppplechild_vite_enqueue_script('/assets/js/editor.js', 'enqueue_block_editor_
 require get_stylesheet_directory() . '/inc/theme-customization/wp_customization.php';
 
 // Blocks
+require get_stylesheet_directory() . '/inc/blocks/categories-register.php';
+
 require get_stylesheet_directory() . '/inc/blocks/acf/blocks-helpers.php';
-require get_stylesheet_directory() . '/inc/blocks/acf/categories-register.php';
 require get_stylesheet_directory() . '/inc/blocks/acf/blocks-register.php';
 
 require get_stylesheet_directory() . '/inc/blocks/react/blocks-register.php';
