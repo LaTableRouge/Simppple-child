@@ -40,7 +40,7 @@ function simppplechild_vite_fetch_asset_from_manifest($fileThemePath, $assetType
                     foreach ($manifest[$fileKey]['css'] as $stylePath) {
                         $styleFile = basename($stylePath);
                         $styleFileWithoutExtension = substr($styleFile, 0, strrpos($styleFile, '.'));
-                        $styleFileWithoutVersionning = substr($styleFile, 0, strrpos($styleFileWithoutExtension, '.'));
+                        $styleFileWithoutVersionning = substr($styleFileWithoutExtension, 0, strpos($styleFileWithoutExtension, '-'));
 
                         $returnedArray['css'][] = [
                             'path' => SIMPPPLECHILD_DIST_URI . "/{$stylePath}",
@@ -112,7 +112,7 @@ function simppplechild_vite_enqueue_style($fileThemePath, $hookBuild, $hookDev =
                         'all'
                     );
                 },
-                20
+                21
             );
         }
     }
@@ -162,7 +162,7 @@ function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev 
                                 'all'
                             );
                         },
-                        20
+                        21
                     );
                 }
             }
@@ -205,7 +205,7 @@ function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev 
 
                     wp_enqueue_script($fileSlug);
                 },
-                20
+                21
             );
         }
     }
@@ -224,7 +224,7 @@ function simppplechild_vite_enqueue_style_editor($fileThemePath, $hook) {
             function () use ($filePath) {
                 add_editor_style($filePath);
             },
-            20
+            21
         );
     } else {
         echo 'Please compile (build/prod) to see the editor style';

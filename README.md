@@ -2,7 +2,7 @@
 
 ![WordPress Version](https://img.shields.io/badge/wordpress-%3E%3D%206.4-blue)
 ![Node](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)
-![PHP](https://img.shields.io/badge/php-%5E8.0-blue)
+![PHP](https://img.shields.io/badge/php-%5E7.4-blue)
 ![ACF Version](https://img.shields.io/badge/acf-%3E%3D%206.0-cyan)
 
 Simppple-child is a Wordpress child theme of the [Simppple theme](https://github.com/LaTableRouge/Simppple) designed for developpers. You can use this theme as a sandbox to create your own react/acf blocks or patterns.
@@ -102,7 +102,7 @@ Templates can be created and edited in the `templates/` ([see README](./template
 To generate the .pot file (from the theme's directory):
 
 ```bash
-wp i18n make-pot . lang/simppple.pot --domain=simppple --exclude=node_modules,vendor,lang --include=*.php,blocks,build
+wp i18n make-pot . lang/simppple.pot --domain=simppple --exclude=node_modules,vendor,lang --include=*.php,build
 ```
 
 To generate the translation json files for JS (from the theme's directory):
