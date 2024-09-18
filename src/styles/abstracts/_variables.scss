@@ -31,22 +31,22 @@ $sizes: ();
 //  - 1280px
 // Theses under are basic ones for more flexible responsive design
 $grid-breakpoints: (
-	xs: 0,
-	sm: 600px,
-	md: 782px,
-	lg: 960px,
-	xl: 1280px,
-	xxl: 1440px,
-	fhd: 1920px
+  xs: 0,
+  sm: 600px,
+  md: 782px,
+  lg: 960px,
+  xl: 1280px,
+  xxl: 1440px,
+  fhd: 1920px
 );
 
 // Wordpress container max widths are defined in the theme.json in the settings.layout section
 // Theses under are basic ones for more flexible responsive design
 $container-max-widths: (
-	sm: 540px,
-	md: 720px,
-	lg: 960px,
-	xl: 1140px,
-	xxl: 1320px,
-	fhd: 1440px
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1320px,
+  fhd: 1440px
 );

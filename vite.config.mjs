@@ -3,7 +3,6 @@ import { resolve } from 'path'
 import { stringReplaceOpenAndWrite, viteStringReplace } from '@mlnop/string-replace'
 import autoprefixer from 'autoprefixer'
 import { defineConfig, loadEnv } from 'vite'
-import { run } from 'vite-plugin-run'
 import sassGlobImports from 'vite-plugin-sass-glob-import'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
 
@@ -17,7 +16,7 @@ import { viteStaticCopy } from 'vite-plugin-static-copy'
  |
  */
 const themeName = 'simppple-child'
-const assetsPath = 'assets'
+const assetsPath = 'src'
 const distPath = 'build'
 
 /*
@@ -46,109 +45,33 @@ const entryFiles = [
 		scripts: [
 			{
 				name: 'front',
-				input: `${assetsPath}/js`
+				input: `${assetsPath}/scripts`
 			},
 			{
 				name: 'admin',
-				input: `${assetsPath}/js`
+				input: `${assetsPath}/scripts`
 			},
 			{
 				name: 'editor',
-				input: `${assetsPath}/js`
+				input: `${assetsPath}/scripts`
 			},
 		],
 		styles: [
 			{
 				name: 'front',
-				input: `${assetsPath}/scss`
+				input: `${assetsPath}/styles`
 			},
 			{
 				name: 'admin',
-				input: `${assetsPath}/scss`
+				input: `${assetsPath}/styles`
 			},
 			{
 				name: 'editor',
-				input: `${assetsPath}/scss`
+				input: `${assetsPath}/styles`
 			},
 		]
 	}
 ]
-
-/*
- |--------------------------------------------------------------------------
- | Beautify config (lint/prettier files)
- |--------------------------------------------------------------------------
- | {
- |    js|php|scss: {
- |     - Config (string)
- |     - Files (array of strings)
- |    }
- | }
- |
- */
-const beautifyObject = {
-	js_lint: {
-		config: 'npx eslint --no-error-on-unmatched-pattern --fix',
-		files: [
-			...Array.from(new Set(entryFiles.flatMap(element => element.scripts.flatMap(script => script.input)))),
-			'blocks/react/src',
-			'blocks/acf',
-			'blocks/core',
-			'blocks/woocommerce',
-			'parts',
-			'patterns',
-			'templates'
-		]
-	},
-	js_prettier: {
-		config: 'npx prettier --no-error-on-unmatched-pattern --write',
-		files: [
-			...Array.from(new Set(entryFiles.flatMap(element => element.scripts.flatMap(script => script.input)))),
-			'blocks/react/src',
-			'blocks/acf',
-			'blocks/core',
-			'blocks/woocommerce',
-			'parts',
-			'patterns',
-			'templates'
-		]
-	},
-	scss_lint: {
-		config: 'npx stylelint --allow-empty-input --fix',
-		files: [
-			...Array.from(new Set(entryFiles.flatMap(element => element.styles.flatMap(style => style.input)))),
-			'blocks/react/src',
-			'blocks/acf',
-			'blocks/core',
-			'blocks/woocommerce',
-			'parts',
-			'patterns',
-			'templates'
-		]
-	},
-	scss_prettier: {
-		config: 'npx prettier --no-error-on-unmatched-pattern --write',
-		files: [
-			...Array.from(new Set(entryFiles.flatMap(element => element.styles.flatMap(style => style.input)))),
-			'blocks/react/src',
-			'blocks/acf',
-			'blocks/core',
-			'blocks/woocommerce',
-			'parts',
-			'patterns',
-			'templates'
-		]
-	},
-	php_lint: {
-		config: `${resolve(__dirname, 'vendor/bin/php-cs-fixer.bat')} fix -v --show-progress=dots --using-cache=no --config=${resolve(__dirname, '.php-cs-fixer.php')}`,
-		files: [
-			'inc',
-			'functions.php',
-			'patterns',
-			'blocks'
-		]
-	}
-}
 
 /*
  |--------------------------------------------------------------------------
@@ -246,10 +169,8 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				*/
 				if (group.styles?.length) {
 					group.styles.forEach(file => {
-						if (chore === undefined || chore === 'all' || chore.includes('scss')) {
-							if (!entriesToCompile.includes(`${file.input}/${file.name}.scss`)) {
-								entriesToCompile.push(`${file.input}/${file.name}.scss`)
-							}
+						if (!entriesToCompile.includes(`${file.input}/${file.name}.scss`)) {
+							entriesToCompile.push(`${file.input}/${file.name}.scss`)
 						}
 					})
 				}
@@ -324,42 +245,8 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				...sassGlobImports(),
 				enforce: 'pre',
 			},
-			chore === 'all'
-				? {
-					...viteStringReplace(filesToEdit),
-					apply: 'build',
-					enforce: 'pre',
-				}
-				: false,
 			{
-				...run({
-					silent: false,
-					skipDts: true,
-					input: chore === 'all'
-						? [
-							{
-								name: 'prettier:scss',
-								run: [`${beautifyObject.scss_prettier.config} ${beautifyObject.scss_prettier.files.length > 1 ? `{${beautifyObject.scss_prettier.files.join(',')}}` : beautifyObject.scss_prettier.files.join(',')}/**/*.scss`],
-							},
-							{
-								name: 'lint:scss',
-								run: [`${beautifyObject.scss_lint.config} ${beautifyObject.scss_lint.files.length > 1 ? `{${beautifyObject.scss_lint.files.join(',')}}` : beautifyObject.scss_lint.files.join(',')}/**/*.scss`],
-							},
-							{
-								name: 'prettier:js',
-								run: [`${beautifyObject.js_prettier.config} ${beautifyObject.js_prettier.files.length > 1 ? `{${beautifyObject.js_prettier.files.join(',')}}` : beautifyObject.js_prettier.files.join(',')}/**/*.js`],
-							},
-							{
-								name: 'lint:js',
-								run: [`${beautifyObject.js_lint.config} ${beautifyObject.js_lint.files.length > 1 ? `{${beautifyObject.js_lint.files.join(',')}}` : beautifyObject.js_lint.files.join(',')}/**/*.js`],
-							},
-							{
-								name: 'lint:php',
-								run: [`${beautifyObject.php_lint.config} ${beautifyObject.php_lint.files.join(' ')}`],
-							}
-						]
-						: []
-				}),
+				...viteStringReplace(filesToEdit),
 				apply: 'build',
 				enforce: 'pre',
 			},

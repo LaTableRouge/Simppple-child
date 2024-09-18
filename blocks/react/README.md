@@ -18,8 +18,8 @@
 
 ## Compilation
 
-- see [package.json](../../../package.json)
+- see [package.json](../../package.json)
 
 ## Translation
 
-- The translations for the blocks should be generated at the same time as those for the theme (See [README](../../../README.md#translation))
+- The translations for the blocks should be generated at the same time as those for the theme (See [README](../../README.md#translation))

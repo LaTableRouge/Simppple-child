@@ -6,24 +6,24 @@
 /// @author Kitty Giraudel
 /// @param {String} $context
 @mixin when-inside($context) {
-	#{$context} & {
-		@content;
-	}
+  #{$context} & {
+    @content;
+  }
 }
 
 @mixin text-shorten {
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 @mixin unselectable {
-	pointer-events: none;
-	user-select: none;
-	-webkit-touch-callout: none;
+  pointer-events: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 @mixin hidden {
-	display: none;
-	visibility: hidden;
+  display: none;
+  visibility: hidden;
 }

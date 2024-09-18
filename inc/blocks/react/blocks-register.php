@@ -49,7 +49,7 @@ function simppplechild_register_react_blocks() {
                     foreach ($handles as $handle) {
                         wp_set_script_translations(
                             $handle,
-                            'simpple-blocks',
+                            'simpple',
                             get_stylesheet_directory() . '/lang'
                         );
                     }

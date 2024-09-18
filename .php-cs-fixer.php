@@ -16,6 +16,7 @@ $rules = [
     'blank_line_before_statement' => [
         'statements' => ['return']
     ],
+    'single_space_around_construct' => true,
     'control_structure_braces' => true,
     'braces_position' => [
         'functions_opening_brace' => 'same_line',
@@ -57,11 +58,6 @@ $rules = [
     'lowercase_cast' => true,
     'lowercase_keywords' => true,
     'lowercase_static_reference' => true,
-    'method_argument_space' => [
-        'on_multiline' => 'ensure_fully_multiline',
-        'keep_multiple_spaces_after_comma' => false,
-        'attribute_placement' => 'same_line'
-    ],
     'multiline_whitespace_before_semicolons' => [
         'strategy' => 'no_multi_line'
     ],
@@ -106,9 +102,7 @@ $rules = [
     ],
     'single_quote' => true,
     'space_after_semicolon' => true,
-    'spaces_inside_parentheses' => [
-        'space' => 'none'
-    ],
+    'spaces_inside_parentheses' => false,
     'standardize_not_equals' => true,
     'switch_case_semicolon_to_colon' => true,
     'switch_case_space' => true,
@@ -122,6 +116,9 @@ $rules = [
 $finder = Finder::create()
     ->name('*.php')
     ->notName('*.blade.php')
+    ->notPath([
+        'build/'
+    ])
     ->ignoreDotFiles(true)
     ->ignoreVCS(true);
 
