@@ -20,368 +20,388 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "vite",
-    "build": "vite build",
-    "watch:react-blocks": "wp-scripts start --webpack-src-dir=blocks/react --output-path=build/blocks",
-    "build:react-blocks": "wp-scripts build --webpack-src-dir=blocks/react --output-path=build/blocks",
-    "lint:scss": "npx stylelint --allow-empty-input --fix {src/styles/**,blocks/**/styles/**,src/styles,blocks/**/styles,parts/**/styles,parts/**/styles/**,patterns/**/styles,patterns/**/styles/**,templates/**/styles,templates/**/styles/**}*.scss",
-    "prettier:scss": "npx prettier --no-error-on-unmatched-pattern --write {src/styles/**,blocks/**/styles/**,src/styles,blocks/**/styles,parts/**/styles,parts/**/styles/**,patterns/**/styles,patterns/**/styles/**,templates/**/styles,templates/**/styles/**}/*.scss",
-    "lint:js": "npx eslint --no-error-on-unmatched-pattern --fix {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
-    "prettier:js": "npx prettier --no-error-on-unmatched-pattern --write {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
-    "beautify:all": "npm run prettier:scss && npm run lint:scss && npm run prettier:js && npm run lint:js && composer lint:php",
-    "prepare": "husky init && composer install && npm run build && npm run build:react-blocks"
+		"watch": "vite",
+		"build": "vite build",
+		"watch:react-blocks": "wp-scripts start --webpack-src-dir=blocks/react --output-path=build/blocks",
+		"build:react-blocks": "wp-scripts build --webpack-src-dir=blocks/react --output-path=build/blocks",
+		"lint:scss": "npx stylelint --allow-empty-input --fix {src/styles/**,blocks/**/styles/**,src/styles,blocks/**/styles,parts/**/styles,parts/**/styles/**,patterns/**/styles,patterns/**/styles/**,templates/**/styles,templates/**/styles/**}*.scss",
+		"prettier:scss": "npx prettier --no-error-on-unmatched-pattern --write {src/styles/**,blocks/**/styles/**,src/styles,blocks/**/styles,parts/**/styles,parts/**/styles/**,patterns/**/styles,patterns/**/styles/**,templates/**/styles,templates/**/styles/**}/*.scss",
+		"lint:js": "npx eslint --no-error-on-unmatched-pattern --fix {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
+		"prettier:js": "npx prettier --no-error-on-unmatched-pattern --write {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
+		"beautify:all": "npm run prettier:scss && npm run lint:scss && npm run prettier:js && npm run lint:js && composer lint:php",
+		"prepare": "husky init && composer install && npm run build && npm run build:react-blocks"
 	},
-  "devDependencies": {
-    "@commitlint/cli": "^19.4.1",
-    "@commitlint/config-conventional": "^19.4.1",
-    "@wordpress/scripts": "^28.6.0",
-    "browserslist": "^4.23.3",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.0.0",
-    "eslint-config-standard": "^17.1.0",
-    "eslint-plugin-import": "^2.29.0",
-    "eslint-plugin-n": "^16.2.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-prettier": "^5.0.1",
-    "eslint-plugin-promise": "^6.1.1",
-    "eslint-plugin-react": "^7.34.3",
-    "eslint-plugin-simple-import-sort": "^10.0.0",
-    "eslint-plugin-sort-destructure-keys": "^2.0.0",
-    "eslint-plugin-unused-imports": "^3.0.0",
-    "git-precommit-checks": "^3.1.0",
-    "husky": "^9.1.5",
-    "lint-staged": "^15.2.10",
-    "prettier": "^3.3.3",
-    "sass": "^1.77.8",
-    "sass-loader": "^16.0.1",
-    "stylelint": "^15.11.0",
-    "stylelint-config-property-sort-order-smacss": "^10.0.0",
-    "stylelint-config-sass-guidelines": "^10.0.0",
-    "stylelint-config-standard": "^34.0.0",
-    "stylelint-order": "^6.0.4",
-    "validate-branch-name": "^1.3.1",
-    "vite": "^5.4.2",
-    "vite-plugin-sass-glob-import": "^3.0.2",
-    "vite-plugin-static-copy": "^1.0.6",
-    "autoprefixer": "^10.4.20",
-    "@mlnop/string-replace": "^1.0.5"
-  },
-  "lint-staged": {
-    "src/styles/**/*.scss": [
-      "npx stylelint --allow-empty-input --fix",
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx stylelint --allow-empty-input --fix"
-    ],
-    "blocks/**/*.scss": [
-      "npx stylelint --allow-empty-input --fix",
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx stylelint --allow-empty-input --fix"
-    ],
-    "parts/**/*.scss": [
-      "npx stylelint --allow-empty-input --fix",
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx stylelint --allow-empty-input --fix"
-    ],
-    "patterns/**/*.scss": [
-      "npx stylelint --allow-empty-input --fix",
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx stylelint --allow-empty-input --fix"
-    ],
-    "templates/**/*.scss": [
-      "npx stylelint --allow-empty-input --fix",
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx stylelint --allow-empty-input --fix"
-    ],
-    "src/scripts/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "blocks/react/src/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "blocks/acf/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "blocks/core/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "blocks/woocommerce/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "parts/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "patterns/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ],
-    "templates/**/*.js": [
-      "npx prettier --no-error-on-unmatched-pattern --write",
-      "npx eslint --no-error-on-unmatched-pattern --fix"
-    ]
-  },
-  "validate-branch-name": {
-    "pattern": "^(main|master|srv/dev|srv/pre)$|^(feature|fix|hotfix|experimental|minor|major|release)/.+$",
-    "errorMsg": "🤨 The branch you're trying to push doesn't respect our conventions, you can rename it with `git branch -m <current-name> <new-name>`"
-  },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ],
-    "rules": {
-      "type-enum": [
-        2,
-        "always",
-        [
-          "build",
-          "chore",
-          "docs",
-          "feat",
-          "fix",
-          "refactor",
-          "revert",
-          "style",
-          "wordpress",
-          "wp"
-        ]
-      ]
-    }
-  },
-  "git-precommit-checks": {
-    "display": {
-      "notifications": true,
-      "offendingContent": true,
-      "rulesSummary": false,
-      "shortStats": true,
-      "verbose": false
-    },
-    "rules": [
-      {
-        "message": "Have you forgotten to finish some tasks?",
-        "nonBlocking": true,
-        "regex": "/(?:FIXME|TODO)/"
-      },
-      {
-        "message": "You have conflict markers lying around",
-        "regex": "/^[<>|=]{4,}/m"
-      },
-      {
-        "message": "Commit stopped: you've entered information that must not be committed!",
-        "regex": "/do not commit/i"
-      },
-      {
-        "filter": "/\\.js$/",
-        "message": "🤔 Hum! Didn't you forget to remove from \"console.log(...)\"?",
-        "nonBlocking": true,
-        "regex": "/^\\s*console\\.log/"
-      }
-    ]
-  },
-  "browserslist": [
-    "last 2 version"
-  ],
-  "prettier": {
-    "trailingComma": "none",
-    "printWidth": 180,
-    "tabWidth": 2,
-    "singleQuote": true,
-    "semi": false,
-    "bracketSpacing": true
-  },
-  "prettierIgnore": [],
-  "stylelint": {
-    "extends": [
-      "stylelint-config-property-sort-order-smacss",
-      "stylelint-config-sass-guidelines"
-    ],
-    "plugins": [
-      "stylelint-order"
-    ],
-    "rules": {
-      "at-rule-empty-line-before": [
-        "always",
-        {
-          "except": [
-            "blockless-after-same-name-blockless"
-          ],
-          "ignore": [
-            "after-comment",
-            "first-nested"
-          ],
-          "ignoreAtRules": [
-            "else",
-            "if"
-          ],
-          "severity": "warning"
-        }
-      ],
-      "block-no-empty": true,
-      "color-named": null,
-      "custom-property-empty-line-before": [
-        "always",
-        {
-          "except": [
-            "after-custom-property"
-          ],
-          "ignore": [
-            "after-comment",
-            "first-nested",
-            "inside-single-line-block"
-          ],
-          "severity": "warning"
-        }
-      ],
-      "declaration-empty-line-before": [
-        "always",
-        {
-          "except": [
-            "after-declaration"
-          ],
-          "ignore": [
-            "after-comment",
-            "first-nested",
-            "inside-single-line-block"
-          ],
-          "severity": "warning"
-        }
-      ],
-      "declaration-no-important": [
-        true,
-        {
-          "message": "Do you really need this to be important ? 🤔",
-          "severity": "warning"
-        }
-      ],
-      "declaration-property-value-disallowed-list": null,
-      "max-nesting-depth": null,
-      "order/properties-alphabetical-order": null,
-      "order/order": [
-        "dollar-variables",
-        "custom-properties",
-        "declarations",
-        "at-rules",
-        "rules"
-      ],
-      "property-no-unknown": null,
-      "property-no-vendor-prefix": null,
-      "rule-empty-line-before": [
-        "always",
-        {
-          "ignore": [
-            "after-comment",
-            "first-nested"
-          ],
-          "severity": "warning"
-        }
-      ],
-      "scss/at-extend-no-missing-placeholder": null,
-      "scss/at-function-pattern": null,
-      "scss/at-import-partial-extension-blacklist": null,
-      "scss/at-mixin-pattern": null,
-      "scss/dollar-variable-pattern": null,
-      "scss/no-global-function-names": null,
-      "scss/percent-placeholder-pattern": null,
-      "scss/selector-no-redundant-nesting-selector": null,
-      "selector-class-pattern": null,
-      "selector-disallowed-list": [
-        "/\\*/",
-        {
-          "message": "The universal selector (*) is known to be slow 🦥",
-          "severity": "warning"
-        }
-      ],
-      "selector-max-compound-selectors": null,
-      "selector-max-id": null,
-      "selector-no-qualifying-type": null,
-      "shorthand-property-no-redundant-values": null,
-      "value-no-vendor-prefix": null
-    }
-  },
-  "stylelintIgnore": [
-    "src/styles/abstract/**/*.scss"
-  ],
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "es2021": true
-    },
-    "extends": [
-      "standard",
-      "eslint:recommended",
-      "plugin:react/recommended"
-    ],
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "sourceType": "module"
-    },
-    "globals": {
-      "wp": true,
-      "jQuery": true,
-      "block_params": true,
-      "plugin_params": true,
-      "fw_data": true
-    },
-    "plugins": [
-      "react",
-      "unused-imports",
-      "simple-import-sort",
-      "sort-destructure-keys"
-    ],
-    "rules": {
-      "object-shorthand": 0,
-      "space-before-function-paren": "off",
-      "comma-dangle": [
-        "error",
-        "only-multiline"
-      ],
-      "generator-star-spacing": [
-        "error",
-        {
-          "before": false,
-          "after": true
-        }
-      ],
-      "unused-imports/no-unused-imports": "warn",
-      "simple-import-sort/imports": "error",
-      "simple-import-sort/exports": "error",
-      "no-console": "warn",
-      "operator-linebreak": [
-        "error",
-        "before"
-      ],
-      "react/react-in-jsx-scope": "off",
-      "react/prop-types": "off",
-      "react/jsx-sort-props": [
-        1,
-        {
-          "ignoreCase": true,
-          "callbacksLast": true,
-          "shorthandFirst": true,
-          "multiline": "ignore",
-          "reservedFirst": true
-        }
-      ],
-      "sort-destructure-keys/sort-destructure-keys": [
-        2,
-        {
-          "caseSensitive": false
-        }
-      ]
-    }
-  },
-  "eslintIgnore": [
-    "build/"
-  ]
+	"devDependencies": {
+		"@commitlint/cli": "^19.4.1",
+		"@commitlint/config-conventional": "^19.4.1",
+		"@wordpress/scripts": "^28.6.0",
+		"browserslist": "^4.23.3",
+		"eslint": "^8.57.0",
+		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-standard": "^17.1.0",
+		"eslint-plugin-import": "^2.29.0",
+		"eslint-plugin-n": "^16.2.0",
+		"eslint-plugin-node": "^11.1.0",
+		"eslint-plugin-prettier": "^5.0.1",
+		"eslint-plugin-promise": "^6.1.1",
+		"eslint-plugin-react": "^7.34.3",
+		"eslint-plugin-simple-import-sort": "^10.0.0",
+		"eslint-plugin-sort-destructure-keys": "^2.0.0",
+		"eslint-plugin-unused-imports": "^3.0.0",
+		"git-precommit-checks": "^3.1.0",
+		"husky": "^9.1.5",
+		"lint-staged": "^15.2.10",
+		"prettier": "^3.3.3",
+		"sass": "^1.77.8",
+		"sass-loader": "^16.0.1",
+		"stylelint": "^15.11.0",
+		"stylelint-config-property-sort-order-smacss": "^10.0.0",
+		"stylelint-config-sass-guidelines": "^10.0.0",
+		"stylelint-config-standard": "^34.0.0",
+		"stylelint-order": "^6.0.4",
+		"validate-branch-name": "^1.3.1",
+		"vite": "^5.4.2",
+		"vite-plugin-static-copy": "^1.0.6",
+		"autoprefixer": "^10.4.20",
+		"@mlnop/string-replace": "^1.0.5",
+		"ansi-colors": "^4.1.3",
+    "glob": "^11.0.0",
+    "minimatch": "^10.0.1"
+	},
+	"lint-staged": {
+		"src/styles/**/*.scss": [
+			"npx stylelint --allow-empty-input --fix",
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx stylelint --allow-empty-input --fix"
+		],
+		"blocks/**/*.scss": [
+			"npx stylelint --allow-empty-input --fix",
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx stylelint --allow-empty-input --fix"
+		],
+		"parts/**/*.scss": [
+			"npx stylelint --allow-empty-input --fix",
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx stylelint --allow-empty-input --fix"
+		],
+		"patterns/**/*.scss": [
+			"npx stylelint --allow-empty-input --fix",
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx stylelint --allow-empty-input --fix"
+		],
+		"templates/**/*.scss": [
+			"npx stylelint --allow-empty-input --fix",
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx stylelint --allow-empty-input --fix"
+		],
+		"src/scripts/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"blocks/react/src/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"blocks/acf/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"blocks/core/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"blocks/woocommerce/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"parts/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"patterns/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		],
+		"templates/**/*.js": [
+			"npx prettier --no-error-on-unmatched-pattern --write",
+			"npx eslint --no-error-on-unmatched-pattern --fix"
+		]
+	},
+	"validate-branch-name": {
+		"pattern": "^(main|master|srv/dev|srv/pre)$|^(feature|fix|hotfix|experimental|minor|major|release)/.+$",
+		"errorMsg": "🤨 The branch you're trying to push doesn't respect our conventions, you can rename it with `git branch -m <current-name> <new-name>`"
+	},
+	"commitlint": {
+		"extends": [
+			"@commitlint/config-conventional"
+		],
+		"rules": {
+			"type-enum": [
+				2,
+				"always",
+				[
+					"build",
+					"chore",
+					"docs",
+					"feat",
+					"fix",
+					"refactor",
+					"revert",
+					"style",
+					"wordpress",
+					"wp"
+				]
+			]
+		}
+	},
+	"git-precommit-checks": {
+		"display": {
+			"notifications": true,
+			"offendingContent": true,
+			"rulesSummary": false,
+			"shortStats": true,
+			"verbose": false
+		},
+		"rules": [
+			{
+				"message": "Have you forgotten to finish some tasks?",
+				"nonBlocking": true,
+				"regex": "/(?:FIXME|TODO)/"
+			},
+			{
+				"message": "You have conflict markers lying around",
+				"regex": "/^[<>|=]{4,}/m"
+			},
+			{
+				"message": "Commit stopped: you've entered information that must not be committed!",
+				"regex": "/do not commit/i"
+			},
+			{
+				"filter": "/\\.js$/",
+				"message": "🤔 Hum! Didn't you forget to remove from \"console.log(...)\"?",
+				"nonBlocking": true,
+				"regex": "/^\\s*console\\.log/"
+			}
+		]
+	},
+	"browserslist": [
+		"last 2 version"
+	],
+	"prettier": {
+		"trailingComma": "none",
+		"printWidth": 100000,
+		"tabWidth": 2,
+		"singleQuote": true,
+		"semi": false,
+		"bracketSpacing": true
+	},
+	"prettierIgnore": [
+		"build/"
+	],
+	"stylelint": {
+		"extends": [
+			"stylelint-config-property-sort-order-smacss",
+			"stylelint-config-sass-guidelines"
+		],
+		"plugins": [
+			"stylelint-order"
+		],
+		"rules": {
+			"at-rule-empty-line-before": [
+				"always",
+				{
+					"except": [
+						"blockless-after-same-name-blockless"
+					],
+					"ignore": [
+						"after-comment",
+						"first-nested"
+					],
+					"ignoreAtRules": [
+						"else",
+						"if"
+					],
+					"severity": "warning"
+				}
+			],
+			"block-no-empty": true,
+			"color-named": null,
+			"custom-property-empty-line-before": [
+				"always",
+				{
+					"except": [
+						"after-custom-property"
+					],
+					"ignore": [
+						"after-comment",
+						"first-nested",
+						"inside-single-line-block"
+					],
+					"severity": "warning"
+				}
+			],
+			"declaration-empty-line-before": [
+				"always",
+				{
+					"except": [
+						"after-declaration"
+					],
+					"ignore": [
+						"after-comment",
+						"first-nested",
+						"inside-single-line-block"
+					],
+					"severity": "warning"
+				}
+			],
+			"declaration-no-important": [
+				true,
+				{
+					"message": "Do you really need this to be important ? 🤔",
+					"severity": "warning"
+				}
+			],
+			"declaration-property-value-disallowed-list": null,
+			"max-nesting-depth": null,
+			"order/properties-alphabetical-order": null,
+			"order/order": [
+				"dollar-variables",
+				"custom-properties",
+				"declarations",
+				"at-rules",
+				"rules"
+			],
+			"property-no-unknown": null,
+			"property-no-vendor-prefix": null,
+			"rule-empty-line-before": [
+				"always",
+				{
+					"ignore": [
+						"after-comment",
+						"first-nested"
+					],
+					"severity": "warning"
+				}
+			],
+			"scss/at-extend-no-missing-placeholder": null,
+			"scss/at-function-pattern": null,
+			"scss/at-import-partial-extension-blacklist": null,
+			"scss/at-mixin-pattern": null,
+			"scss/dollar-variable-pattern": null,
+			"scss/no-global-function-names": null,
+			"scss/percent-placeholder-pattern": null,
+			"scss/selector-no-redundant-nesting-selector": null,
+			"selector-class-pattern": null,
+			"selector-disallowed-list": [
+				"/\\*/",
+				{
+					"message": "The universal selector (*) is known to be slow 🦥",
+					"severity": "warning"
+				}
+			],
+			"selector-max-compound-selectors": null,
+			"selector-max-id": null,
+			"selector-no-qualifying-type": null,
+			"shorthand-property-no-redundant-values": null,
+			"value-no-vendor-prefix": null
+		},
+		"ignoreFiles": [
+			"src/styles/abstracts/**/*.scss"
+		]
+	},
+	"stylelintIgnore": [
+		"src/styles/abstract/**/*.scss"
+	],
+	"eslintConfig": {
+		"env": {
+			"browser": true,
+			"es2021": true
+		},
+		"extends": [
+			"standard",
+			"eslint:recommended",
+			"plugin:react/recommended"
+		],
+		"settings": {
+			"react": {
+				"version": "detect"
+			}
+		},
+		"parserOptions": {
+			"ecmaFeatures": {
+				"jsx": true
+			},
+			"sourceType": "module"
+		},
+		"globals": {
+			"wp": true,
+			"jQuery": true,
+			"block_params": true,
+			"wpparams": true,
+			"wpchildparams": true
+		},
+		"plugins": [
+			"react",
+			"unused-imports",
+			"simple-import-sort",
+			"sort-destructure-keys"
+		],
+		"rules": {
+			"indent": [
+				"warn",
+				"tab",
+				{
+					"ObjectExpression": 1
+				}
+			],
+			"no-tabs": [
+				"error",
+				{
+					"allowIndentationTabs": true
+				}
+			],
+			"object-shorthand": 0,
+			"space-before-function-paren": "off",
+			"comma-dangle": [
+				"error",
+				"only-multiline"
+			],
+			"generator-star-spacing": [
+				"error",
+				{
+					"before": false,
+					"after": true
+				}
+			],
+			"unused-imports/no-unused-imports": "warn",
+			"simple-import-sort/imports": "error",
+			"simple-import-sort/exports": "error",
+			"no-console": "warn",
+			"operator-linebreak": [
+				"error",
+				"before"
+			],
+			"react/react-in-jsx-scope": "off",
+			"react/prop-types": "off",
+			"react/jsx-sort-props": [
+				1,
+				{
+					"ignoreCase": true,
+					"callbacksLast": true,
+					"shorthandFirst": true,
+					"multiline": "ignore",
+					"reservedFirst": true
+				}
+			],
+			"sort-destructure-keys/sort-destructure-keys": [
+				2,
+				{
+					"caseSensitive": false
+				}
+			]
+		}
+	},
+	"eslintIgnore": [
+		"build/"
+	]
 }

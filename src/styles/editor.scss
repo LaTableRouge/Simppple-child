@@ -1,10 +1,10 @@
 @charset "UTF-8";
 
 // 1. Configuration and helpers
-@import 'abstracts/functions';
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
-@import 'abstracts/responsive';
+@use 'abstracts/functions';
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+@use 'abstracts/responsive';
 
 // 2. Vendors
 
@@ -13,10 +13,8 @@
 // 4. Components
 
 .editor-styles-wrapper {
-  /* stylelint-disable scss/at-import-no-partial-leading-underscore */
-  @import '../../blocks/core/**/scss/_block.scss';
-  @import '../../blocks/core/**/scss/_editor.scss';
-  @import '../../patterns/**/scss/_pattern.scss';
-  @import '../../patterns/**/scss/_editor.scss';
-  /* stylelint-enable scss/at-import-no-partial-leading-underscore */
+	@include meta.load-css('../../blocks/core/**/scss/_block.scss');
+	@include meta.load-css('../../blocks/core/**/scss/_editor.scss');
+	@include meta.load-css('../../patterns/**/scss/_pattern.scss');
+	@include meta.load-css('../../patterns/**/scss/_editor.scss');
 }

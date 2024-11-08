@@ -4,7 +4,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', true);
+define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', false);
 
 /*
  * ================================
