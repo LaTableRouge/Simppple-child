@@ -1,12 +1,12 @@
 @charset "UTF-8";
 
 // 1. Configuration and helpers
-@import 'abstracts/functions';
-@import 'abstracts/variables';
-@import 'abstracts/mixins';
-@import 'abstracts/animations';
-@import 'abstracts/keyframes';
-@import 'abstracts/responsive';
+@use 'abstracts/functions';
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+@use 'abstracts/animations';
+@use 'abstracts/keyframes';
+@use 'abstracts/responsive';
 
 // 2. Vendors
 
@@ -14,13 +14,7 @@
 
 // 4. Components
 
-/* stylelint-disable scss/at-import-no-partial-leading-underscore */
-@import '../../blocks/**/scss/_block.scss';
-@import '../../patterns/**/scss/_pattern.scss';
-
-// 5. parts-related sections
-@import '../../parts/**/scss/_part.scss';
-
-// 6. template-specific styles
-@import '../../templates/**/scss/_template.scss';
-/* stylelint-enable scss/at-import-no-partial-leading-underscore */
+@use '../../blocks/**/scss/_block.scss';
+@use '../../patterns/**/scss/_pattern.scss';
+@use '../../parts/**/scss/_part.scss';
+@use '../../templates/**/scss/_template.scss';

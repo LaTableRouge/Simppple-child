@@ -3,8 +3,12 @@ import { resolve } from 'path'
 import { stringReplaceOpenAndWrite, viteStringReplace } from '@mlnop/string-replace'
 import autoprefixer from 'autoprefixer'
 import { defineConfig, loadEnv } from 'vite'
-import sassGlobImports from 'vite-plugin-sass-glob-import'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+
+// Temporary fix see pull requests below
+// https://github.com/cmalven/vite-plugin-sass-glob-import/pull/20
+// https://github.com/cmalven/vite-plugin-sass-glob-import/pull/20
+import sassGlobImports from './vite-glob-import'
 
 /*
  |--------------------------------------------------------------------------
@@ -242,8 +246,15 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 		base: isProduction ? './' : `/wp-content/themes/${themeName}`, // Url to apply refresh
 		plugins: [
 			{
-				...sassGlobImports(),
-				enforce: 'pre',
+				...sassGlobImports(
+					{
+						namespace(filepath, index) {
+							const fileParts = filepath.replace('.scss', '').split('/')
+							return `${fileParts.at(-4)}-${fileParts.at(-3)}`
+						}
+					}
+				),
+				enforce: 'pre'
 			},
 			{
 				...viteStringReplace(filesToEdit),
@@ -267,13 +278,23 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 		build: {
 			rollupOptions: {
 				input: entriesToCompile,
+				output: {
+					entryFileNames: 'assets/[name].js',
+					chunkFileNames: 'assets/[name].js',
+					assetFileNames: 'assets/[name].[ext]'
+				}
 			},
 			write: true,
 			minify: isProduction ? 'esbuild' : false,
 			outDir: distPath,
 			emptyOutDir: true,
 			manifest: true,
+			// ssrManifest: true,
 			sourcemap: !isProduction,
+			target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
+			cssCodeSplit: true,
+			cssTarget: ['edge88', 'firefox78', 'chrome87', 'safari14']
+			// cssMinify: 'lightningcss'
 		},
 
 		server: {
@@ -296,9 +317,15 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				plugins: [
 					autoprefixer
 				],
+			},
+			preprocessorOptions: {
+				scss: {
+					api: 'modern-compiler'
+				}
 			}
 		},
 
-		clearScreen: false
+		clearScreen: false,
+		appType: 'custom'
 	}
 })
