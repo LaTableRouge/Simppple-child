@@ -1,7 +1,7 @@
 # Simppple-child Theme
 
 ![WordPress Version](https://img.shields.io/badge/wordpress-%3E%3D%206.4-blue)
-![Node](https://img.shields.io/badge/node-%3E%3D%2018-brightgreen)
+![Node](https://img.shields.io/badge/node-%3E%3D%2022-brightgreen)
 ![PHP](https://img.shields.io/badge/php-%5E7.4-blue)
 ![ACF Version](https://img.shields.io/badge/acf-%3E%3D%206.0-cyan)
 
