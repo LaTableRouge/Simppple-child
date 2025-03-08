@@ -1,14 +1,9 @@
-import { resolve } from 'path'
-
 import { stringReplaceOpenAndWrite, viteStringReplace } from '@mlnop/string-replace'
+import sassGlobImports from '@mlnop/vite-plugin-sass-glob-import'
 import autoprefixer from 'autoprefixer'
+import { resolve } from 'path'
 import { defineConfig, loadEnv } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
-
-// Temporary fix see pull requests below
-// https://github.com/cmalven/vite-plugin-sass-glob-import/pull/20
-// https://github.com/cmalven/vite-plugin-sass-glob-import/pull/20
-import sassGlobImports from './vite-glob-import'
 
 /*
  |--------------------------------------------------------------------------
@@ -58,7 +53,7 @@ const entryFiles = [
 			{
 				name: 'editor',
 				input: `${assetsPath}/scripts`
-			},
+			}
 		],
 		styles: [
 			{
@@ -72,7 +67,7 @@ const entryFiles = [
 			{
 				name: 'editor',
 				input: `${assetsPath}/styles`
-			},
+			}
 		]
 	}
 ]
@@ -95,10 +90,7 @@ const entryFiles = [
  */
 const filesToEdit = [
 	{
-		filePath: [
-			resolve(__dirname, 'inc/'),
-			resolve(__dirname, 'functions.php')
-		],
+		filePath: [resolve(__dirname, 'inc/'), resolve(__dirname, 'functions.php')],
 		replace: [
 			{
 				from: /\bvar_dump\(([^)]+)\);/g,
@@ -137,7 +129,7 @@ const filesToCopy = [
  |--------------------------------------------------------------------------
  */
 
-export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => {
+export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => {
 	const isProduction = command === 'build'
 
 	const env = loadEnv(mode, process.cwd(), '')
@@ -145,7 +137,7 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 
 	const entriesToCompile = []
 	if (entryFiles.length) {
-		entryFiles.forEach(group => {
+		entryFiles.forEach((group) => {
 			if (group) {
 				/*
 				|--------------------------------------------------------------------------
@@ -156,7 +148,7 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				|
 				*/
 				if (group.scripts?.length) {
-					group.scripts.forEach(file => {
+					group.scripts.forEach((file) => {
 						if (!entriesToCompile.includes(`${file.input}/${file.name}.js`)) {
 							entriesToCompile.push(`${file.input}/${file.name}.js`)
 						}
@@ -172,7 +164,7 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 				|
 				*/
 				if (group.styles?.length) {
-					group.styles.forEach(file => {
+					group.styles.forEach((file) => {
 						if (!entriesToCompile.includes(`${file.input}/${file.name}.scss`)) {
 							entriesToCompile.push(`${file.input}/${file.name}.scss`)
 						}
@@ -194,25 +186,19 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 	 */
 	if (chore !== 'ci') {
 		if (isProduction) {
-			await stringReplaceOpenAndWrite(
-				resolve(__dirname, 'functions.php'),
-				[
-					{
-						from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?true[ ]?\);/g,
-						to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', false);"
-					}
-				]
-			)
+			await stringReplaceOpenAndWrite(resolve(__dirname, 'functions.php'), [
+				{
+					from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?true[ ]?\);/g,
+					to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', false);"
+				}
+			])
 		} else {
-			await stringReplaceOpenAndWrite(
-				resolve(__dirname, 'functions.php'),
-				[
-					{
-						from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?false[ ]?\);/g,
-						to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', true);"
-					}
-				]
-			)
+			await stringReplaceOpenAndWrite(resolve(__dirname, 'functions.php'), [
+				{
+					from: /\bdefine\([ ]?'SIMPPPLECHILD_IS_VITE_DEVELOPMENT',[ ]?false[ ]?\);/g,
+					to: "define('SIMPPPLECHILD_IS_VITE_DEVELOPMENT', true);"
+				}
+			])
 		}
 	}
 
@@ -246,20 +232,18 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 		base: isProduction ? './' : `/wp-content/themes/${themeName}`, // Url to apply refresh
 		plugins: [
 			{
-				...sassGlobImports(
-					{
-						namespace(filepath, index) {
-							const fileParts = filepath.replace('.scss', '').split('/')
-							return `${fileParts.at(-4)}-${fileParts.at(-3)}`
-						}
+				...sassGlobImports({
+					namespace(filepath, index) {
+						const fileParts = filepath.replace('.scss', '').split('/')
+						return `${fileParts.at(-4)}-${fileParts.at(-3)}`
 					}
-				),
+				}),
 				enforce: 'pre'
 			},
 			{
 				...viteStringReplace(filesToEdit),
 				apply: 'build',
-				enforce: 'pre',
+				enforce: 'pre'
 			},
 			viteStaticCopy({
 				targets: filesToCopy
@@ -308,15 +292,13 @@ export default defineConfig(async ({ command, mode, isSsrBuild, isPreview }) => 
 			},
 			watch: {
 				usePolling: true
-			},
+			}
 		},
 
 		css: {
 			devSourcemap: !isProduction,
 			postcss: {
-				plugins: [
-					autoprefixer
-				],
+				plugins: [autoprefixer]
 			},
 			preprocessorOptions: {
 				scss: {
