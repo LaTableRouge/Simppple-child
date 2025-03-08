@@ -32,10 +32,10 @@
 		"prepare": "husky"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^19.5.0",
-		"@commitlint/config-conventional": "^19.5.0",
-		"@wordpress/scripts": "^30.5.1",
-		"browserslist": "^4.24.2",
+		"@commitlint/cli": "^19.8.0",
+		"@commitlint/config-conventional": "^19.8.0",
+		"@wordpress/scripts": "^30.12.0",
+		"browserslist": "^4.24.4",
 		"eslint": "^8.57.0",
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-config-standard": "^17.1.0",
@@ -50,7 +50,7 @@
 		"eslint-plugin-unused-imports": "^3.0.0",
 		"git-precommit-checks": "^3.1.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.2.10",
+		"lint-staged": "^15.4.3",
 		"prettier": "^3.3.3",
 		"sass": "^1.77.8",
 		"sass-loader": "^16.0.1",
@@ -59,14 +59,12 @@
 		"stylelint-config-sass-guidelines": "^10.0.0",
 		"stylelint-config-standard": "^34.0.0",
 		"stylelint-order": "^6.0.4",
-		"validate-branch-name": "^1.3.1",
-		"vite": "^5.4.11",
-		"vite-plugin-static-copy": "^1.0.6",
+		"validate-branch-name": "^1.3.2",
+		"vite": "^6.2.1",
+		"vite-plugin-static-copy": "^2.3.0",
 		"autoprefixer": "^10.4.20",
-		"@mlnop/string-replace": "^1.0.5",
-		"ansi-colors": "^4.1.3",
-		"glob": "^11.0.0",
-		"minimatch": "^10.0.1"
+		"@mlnop/string-replace": "^2.0.0",
+		"@mlnop/vite-plugin-sass-glob-import": "^6.0.0"
 	},
 	"lint-staged": {
 		"{src/styles/**/*.scss,blocks/**/*.scss,parts/**/*.scss,patterns/**/*.scss,templates/**/*.scss}": [
