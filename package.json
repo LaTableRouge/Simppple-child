@@ -1,6 +1,6 @@
 {
 	"name": "simppple-child",
-	"version": "1.0.0",
+	"version": "1.1.1",
 	"description": "A child theme of a simple basic gutenberg theme",
 	"main": "vite.config.mjs",
 	"keywords": [
@@ -28,7 +28,7 @@
 		"prettier:scss": "npx prettier --no-error-on-unmatched-pattern --write {src/styles/**,blocks/**/styles/**,src/styles,blocks/**/styles,parts/**/styles,parts/**/styles/**,patterns/**/styles,patterns/**/styles/**,templates/**/styles,templates/**/styles/**}/*.scss",
 		"lint:js": "npx eslint --no-error-on-unmatched-pattern --fix {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
 		"prettier:js": "npx prettier --no-error-on-unmatched-pattern --write {src/scripts/**,blocks/**/scripts/**,src/scripts,blocks/**/scripts,parts/**/scripts,parts/**/scripts/**,patterns/**/scripts,patterns/**/scripts/**,templates/**/scripts,templates/**/scripts/**}/*.{js,jsx}",
-		"beautify:all": "npm run prettier:scss && npm run lint:scss && npm run prettier:js && npm run lint:js && composer lint:php",
+		"beautify:all": "npm run prettier:scss && npm run lint:scss && npm run prettier:js && npm run lint:js && composer lint:php && composer phpstan",
 		"prepare": "husky"
 	},
 	"devDependencies": {
@@ -67,6 +67,12 @@
 		"@mlnop/vite-plugin-sass-glob-import": "^6.0.0"
 	},
 	"lint-staged": {
+		"**/*.php": [
+			"composer lint-staged:php"
+		],
+		"{inc/**/*.php,patterns/**/*.php}": [
+			"composer phpstan"
+		],
 		"{src/styles/**/*.scss,blocks/**/*.scss,parts/**/*.scss,patterns/**/*.scss,templates/**/*.scss}": [
 			"npx stylelint --allow-empty-input --fix",
 			"npx prettier --no-error-on-unmatched-pattern --write",

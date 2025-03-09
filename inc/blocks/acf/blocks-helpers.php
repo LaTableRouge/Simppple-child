@@ -1,40 +1,38 @@
 <?php
 
-/**
- * Traduit les strings de variables
- *
- * from : var:preset|spacing|8
- * to : var(--wp--preset--spacing--8)
- *
- */
-if (!function_exists('convert_custom_properties')) {
-    function convert_custom_properties($value) {
-        $prefix = 'var:';
-        $prefix_len = strlen($prefix);
-        $token_in = '|';
-        $token_out = '--';
-        if (str_starts_with($value, $prefix)) {
-            $unwrapped_name = str_replace(
-                $token_in,
-                $token_out,
-                substr($value, $prefix_len)
-            );
-            $value = "var(--wp--{$unwrapped_name})";
-        }
+namespace SimpppleChild\Blocks\ACF;
 
-        return $value;
+/**
+ * Converts custom property strings to CSS variable format.
+ *
+ * @param string $value The custom property string to convert.
+ * @return string The converted CSS variable string.
+ */
+function convert_custom_properties(string $value): string {
+    $prefix = 'var:';
+    $prefix_len = strlen($prefix);
+    $token_in = '|';
+    $token_out = '--';
+    if (str_starts_with($value, $prefix)) {
+        $unwrapped_name = str_replace(
+            $token_in,
+            $token_out,
+            substr($value, $prefix_len)
+        );
+        $value = "var(--wp--{$unwrapped_name})";
     }
+
+    return $value;
 }
 
 /**
- * Retourne le style en variables css
+ * Returns block style variables as a CSS string.
  *
- * Mise en commun
- *  des presets du theme.json/variation.json
- *  de la configuration back-office
- *
+ * @param array $block The block data.
+ * @param string $block_slug The block slug.
+ * @return string The CSS style variables.
  */
-function simppplechild_get_block_style_variables($block, $block_slug) {
+function get_block_style_variables(array $block, string $block_slug): string {
     $attrs = [];
 
     $themeJSONDatas = wp_get_global_styles(
@@ -94,7 +92,7 @@ function simppplechild_get_block_style_variables($block, $block_slug) {
         }
     }
 
-    // Récupère le style du block édité en Back-office
+    // Retrieve block style edited in Back-office
     if (isset($block['fontSize'])) {
         $fontSize = $block['fontSize'];
         $attrs["--acfblock--{$block_slug}--font-size"] = "var(--wp--preset--font-size--{$fontSize})";
@@ -158,17 +156,17 @@ function simppplechild_get_block_style_variables($block, $block_slug) {
 
         return implode(';', $attrsTemp);
     }
+
+    return '';
 }
 
 /**
- * Retourne le style en inline des propriétés du block
+ * Returns inline block style properties as a CSS string.
  *
- * Mise en commun
- *  des presets du theme.json/variation.json
- *  de la configuration back-office
- *
+ * @param array $block The block data.
+ * @return string The inline CSS style properties.
  */
-function simppplechild_get_block_style_inline($block) {
+function get_block_style_inline(array $block): string {
     $attrs = [];
 
     $themeJSONDatas = wp_get_global_styles(
@@ -291,12 +289,17 @@ function simppplechild_get_block_style_inline($block) {
 
         return implode(';', $attrsTemp);
     }
+
+    return '';
 }
 
 /**
- * Récupère les classes du block (réglages back-office)
+ * Retrieves block classes based on back-office settings.
+ *
+ * @param array $block The block data.
+ * @return string The block classes as a space-separated string.
  */
-function simppplechild_get_block_class($block) {
+function get_block_class(array $block): string {
     $classes = [];
 
     if (isset($block['align'])) {

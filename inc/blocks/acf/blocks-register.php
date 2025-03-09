@@ -1,19 +1,22 @@
 <?php
 
-function simppplechild_register_acf_blocks() {
-    /**
-     * Registers the blocks using the metadata loaded from the `block.json` files.
-     * Behind the scenes, it registers also all assets so they can be enqueued
-     * through the block editor in the corresponding context.
-     *
-     * @see https://developer.wordpress.org/reference/functions/register_block_type/
-     * @see wp-includes\blocks.php
-     */
+namespace SimpppleChild\Blocks\ACF;
 
-    // Include all files in the block react folder
+/**
+ * Registers ACF blocks using metadata from `block.json` files.
+ *
+ * This function registers blocks and their assets so they can be enqueued
+ * through the block editor in the corresponding context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/register_block_type/
+ * @see wp-includes\blocks.php
+ *
+ * @return void
+ */
+function register_acf_blocks(): void {
+    // Include all files in the block ACF folder
     $dirpath = get_stylesheet_directory() . '/blocks/acf/';
 
-    $files = [];
     $files = glob($dirpath . '**/block.json');
 
     if (!empty($files)) {
@@ -34,14 +37,10 @@ function simppplechild_register_acf_blocks() {
                 $scriptEditorHandle = generate_block_asset_handle($metadata['name'], 'editorScript');
                 $scriptHandle = generate_block_asset_handle($metadata['name'], 'viewScript');
                 $handles = [];
-                if (is_array($scriptEditorHandle)) {
-                    array_merge($handles, $scriptEditorHandle);
-                } else {
+                if (!empty($scriptEditorHandle)) {
                     $handles[] = $scriptEditorHandle;
                 }
-                if (is_array($scriptHandle)) {
-                    array_merge($handles, $scriptHandle);
-                } else {
+                if (!empty($scriptHandle)) {
                     $handles[] = $scriptHandle;
                 }
 
@@ -59,5 +58,5 @@ function simppplechild_register_acf_blocks() {
         }
     }
 }
-add_action('init', 'simppplechild_register_acf_blocks', 9);
+add_action('init', __NAMESPACE__ . '\register_acf_blocks', 9);
 

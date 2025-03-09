@@ -47,6 +47,10 @@ const entryFiles = [
 				input: `${assetsPath}/scripts`
 			},
 			{
+				name: 'parts',
+				input: `${assetsPath}/scripts`
+			},
+			{
 				name: 'admin',
 				input: `${assetsPath}/scripts`
 			},
@@ -55,20 +59,7 @@ const entryFiles = [
 				input: `${assetsPath}/scripts`
 			}
 		],
-		styles: [
-			{
-				name: 'front',
-				input: `${assetsPath}/styles`
-			},
-			{
-				name: 'admin',
-				input: `${assetsPath}/styles`
-			},
-			{
-				name: 'editor',
-				input: `${assetsPath}/styles`
-			}
-		]
+		styles: []
 	}
 ]
 
