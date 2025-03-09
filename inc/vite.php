@@ -1,4 +1,14 @@
 <?php
+/**
+ * Vite integration for WordPress theme
+ *
+ * @package SimpppleChild
+ * @subpackage Vite
+ */
+
+declare(strict_types=1);
+
+namespace SimpppleChild\Vite;
 
 if (!defined('ABSPATH')) {
     exit;
@@ -9,45 +19,55 @@ define('SIMPPPLECHILD_DIST_FOLDER', 'build');
 define('SIMPPPLECHILD_DIST_URI', get_stylesheet_directory_uri() . '/' . SIMPPPLECHILD_DIST_FOLDER);
 define('SIMPPPLECHILD_DIST_PATH', get_stylesheet_directory() . '/' . SIMPPPLECHILD_DIST_FOLDER);
 
-function simppplechild_vite_fetch_asset_from_manifest($fileThemePath, $assetType) {
+/**
+ * Fetch asset information from Vite manifest
+ *
+ * @param string $fileThemePath Path to the file relative to theme root
+ * @param string $assetType Type of asset ('script' or 'style')
+ * @return array{
+ *  path?: string,
+ *  slug?: string,
+ *  css?: array<array{path: string, slug: string}>
+ * }
+ */
+function fetch_asset_from_manifest(string $fileThemePath, string $assetType): array {
     $returnedArray = [];
 
     $fileName = basename($fileThemePath);
-    $fileNameWithoutExtension = substr($fileName, 0, strrpos($fileName, '.'));
+    $fileNameWithoutExtension = substr($fileName, 0, (int) strrpos($fileName, '.'));
 
-    // Use manifest json to know which asset to enqueue
-    if (file_exists(SIMPPPLECHILD_DIST_PATH . '/.vite/manifest.json')) {
-        $manifest = json_decode(file_get_contents(SIMPPPLECHILD_DIST_PATH . '/.vite/manifest.json'), true);
+    $manifestPath = SIMPPPLECHILD_DIST_PATH . '/.vite/manifest.json';
+    if (!file_exists($manifestPath)) {
+        return $returnedArray;
+    }
 
-        if (is_array($manifest)) {
-            $manifest_keys = array_keys($manifest);
-            $fileKey = null;
-            foreach ($manifest_keys as $key => $asset) {
-                if (str_contains($asset, $fileName)) {
-                    $fileKey = $asset;
-                    break;
+    /** @var array<string, array{file: string, css?: array<string>}> $manifest */
+    $manifest = json_decode(file_get_contents($manifestPath), true);
+
+    $fileKey = array_reduce(
+        array_keys($manifest),
+        fn(?string $carry, string $asset) => str_contains($asset, $fileName) ? $asset : $carry,
+        null
+    );
+
+    if ($fileKey && isset($manifest[$fileKey])) {
+        $returnedArray = [
+            'path' => SIMPPPLECHILD_DIST_URI . "/{$manifest[$fileKey]['file']}",
+            'slug' => "simppplechild_vite_{$fileNameWithoutExtension}_{$assetType}"
+        ];
+
+        if (isset($manifest[$fileKey]['css']) && !empty($manifest[$fileKey]['css'])) {
+            foreach ($manifest[$fileKey]['css'] as $stylePath) {
+                $styleFile = basename($stylePath);
+                $styleFile = substr($styleFile, 0, (int) strrpos($styleFile, '.'));
+                if (strpos($styleFile, 'ver=')) {
+                    $styleFile = remove_query_arg('ver', $styleFile);
                 }
-            }
 
-            if ($fileKey && isset($manifest[$fileKey])) {
-                $returnedArray = [
-                    'path' => SIMPPPLECHILD_DIST_URI . "/{$manifest[$fileKey]['file']}",
-                    'slug' => "simppplechild_vite_{$fileNameWithoutExtension}_{$assetType}"
+                $returnedArray['css'][] = [
+                    'path' => SIMPPPLECHILD_DIST_URI . "/{$stylePath}",
+                    'slug' => "simppplechild_vite_{$styleFile}_style"
                 ];
-
-                // In case of scss files included in Javascript
-                if (isset($manifest[$fileKey]['css']) && !empty($manifest[$fileKey]['css'])) {
-                    foreach ($manifest[$fileKey]['css'] as $stylePath) {
-                        $styleFile = basename($stylePath);
-                        $styleFileWithoutExtension = substr($styleFile, 0, strrpos($styleFile, '.'));
-                        $styleFileWithoutVersionning = substr($styleFileWithoutExtension, 0, strpos($styleFileWithoutExtension, '-'));
-
-                        $returnedArray['css'][] = [
-                            'path' => SIMPPPLECHILD_DIST_URI . "/{$stylePath}",
-                            'slug' => "simppplechild_vite_{$styleFileWithoutVersionning}_style"
-                        ];
-                    }
-                }
             }
         }
     }
@@ -55,178 +75,223 @@ function simppplechild_vite_fetch_asset_from_manifest($fileThemePath, $assetType
     return $returnedArray;
 }
 
-function simppplechild_vite_enqueue_dev_dependencies() {
+/**
+ * Enqueue development dependencies
+ *
+ * @return void
+ */
+function enqueue_dev_dependencies(): void {
     wp_enqueue_script('jquery');
     wp_enqueue_script('wp-i18n');
     wp_enqueue_script('wp-blocks');
-    echo "<script>
-            var wpchildparams = {
-                ajax_url: '" . admin_url('admin-ajax.php') . "',
-                rest_url: '" . esc_url_raw(get_rest_url(null, '/wp/v2')) . "',
-                rest_nonce: '" . wp_create_nonce('wp_rest') . "',
-                template_directory: '" . get_stylesheet_directory_uri() . "',
-                plugins_directory: '" . plugins_url() . "',
-                pictures_directory: '" . get_stylesheet_directory_uri() . '/build/assets/img' . "',
-                posts_per_page: '" . get_option('posts_per_page') . "'
-            }
-        </script>";
+
+    $wpParams = [
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'rest_url' => esc_url_raw(get_rest_url(null, '/wp/v2')),
+        'rest_nonce' => wp_create_nonce('wp_rest'),
+        'template_directory' => get_stylesheet_directory_uri(),
+        'plugins_directory' => plugins_url(),
+        'pictures_directory' => get_stylesheet_directory_uri() . '/build/assets/img',
+        'posts_per_page' => get_option('posts_per_page'),
+    ];
+
+    printf(
+        '<script>var wpchildparams = %s;</script>',
+        wp_json_encode($wpParams)
+    );
 }
 
-function simppplechild_vite_enqueue_style($fileThemePath, $hookBuild, $hookDev = false) {
-    if (!$hookDev) {
-        $hookDev = $hookBuild;
-    }
+/**
+ * Enqueue style assets
+ *
+ * @param string $fileThemePath Path to the file relative to theme root
+ * @param string $hookBuild WordPress hook for build mode
+ * @param string|false $hookDev WordPress hook for dev mode
+ * @return void
+ */
+function enqueue_style(string $fileThemePath, string $hookBuild, string|false $hookDev = false): void {
+    $hookDev = $hookDev ?: $hookBuild;
 
-    $adminAsset = str_contains($hookBuild, 'admin') || str_contains($hookBuild, 'block') || str_contains($hookBuild, 'editor');
+    $adminAsset = str_contains($hookBuild, 'admin')
+        || str_contains($hookBuild, 'block')
+        || str_contains($hookBuild, 'editor');
+
     if ($adminAsset && !is_admin()) {
         return;
     }
 
     if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT === true) {
-        /*
-        * ================================ Inject assets in DOM
-        * insert link tag for styles
-        */
-        $themePath = get_stylesheet_directory_uri();
-        $themePath = parse_url($themePath, PHP_URL_PATH);
-
-        add_action($hookDev, function () use ($themePath, $fileThemePath) {
-            echo '<link rel="stylesheet" href="' . SIMPPPLECHILD_VITE_SERVER . $themePath . $fileThemePath . '">';
+        $themePath = parse_url(get_stylesheet_directory_uri(), PHP_URL_PATH);
+        add_action($hookDev, function () use ($themePath, $fileThemePath): void {
+            printf(
+                '<link rel="stylesheet" href="%s">',
+                esc_url(SIMPPPLECHILD_VITE_SERVER . $themePath . $fileThemePath)
+            );
         });
-    } else {
-        /*
-        * ================================ Call assets with WP hooks
-        */
-        $manifestFileInfos = simppplechild_vite_fetch_asset_from_manifest($fileThemePath, 'style');
-        if (!empty($manifestFileInfos)) {
-            $filePath = $manifestFileInfos['path'];
-            $fileSlug = $manifestFileInfos['slug'];
+
+        return;
+    }
+
+    $manifestFileInfos = fetch_asset_from_manifest($fileThemePath, 'style');
+    if (empty($manifestFileInfos)) {
+        return;
+    }
+
+    $filePath = $manifestFileInfos['path'];
+    $fileSlug = $manifestFileInfos['slug'];
+
+    add_action(
+        $hookBuild,
+        function () use ($fileSlug, $filePath): void {
+            wp_enqueue_style(
+                $fileSlug,
+                $filePath,
+                [],
+                '1.1.1',
+                'all'
+            );
+        },
+        21
+    );
+}
+
+/**
+ * Enqueue script assets
+ *
+ * @param string $fileThemePath Path to the file relative to theme root
+ * @param string $hookBuild WordPress hook for build mode
+ * @param string|false $hookDev WordPress hook for dev mode
+ * @param bool $footerEnqueue Whether to enqueue in footer
+ * @param string $type Script type (e.g., 'module')
+ * @param int $order Action priority
+ * @return void
+ */
+function enqueue_script(
+    string $fileThemePath,
+    string $hookBuild,
+    string|false $hookDev = false,
+    bool $footerEnqueue = true,
+    string $type = '',
+    int $order = 21
+): void {
+    $hookDev = $hookDev ?: $hookBuild;
+
+    $adminAsset = str_contains($hookBuild, 'admin')
+        || str_contains($hookBuild, 'block')
+        || str_contains($hookBuild, 'editor');
+
+    if ($adminAsset && !is_admin()) {
+        return;
+    }
+
+    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT === true) {
+        $themePath = parse_url(get_stylesheet_directory_uri(), PHP_URL_PATH);
+
+        remove_action($hookDev, __NAMESPACE__ . '\enqueue_dev_dependencies');
+        add_action($hookDev, __NAMESPACE__ . '\enqueue_dev_dependencies');
+        add_action($hookDev, function () use ($themePath, $fileThemePath): void {
+            printf(
+                '<script type="module" crossorigin src="%s"></script>',
+                esc_url(SIMPPPLECHILD_VITE_SERVER . $themePath . $fileThemePath)
+            );
+        });
+
+        return;
+    }
+
+    $manifestFileInfos = fetch_asset_from_manifest($fileThemePath, 'script');
+    if (empty($manifestFileInfos)) {
+        return;
+    }
+
+    // Enqueue associated CSS files
+    if (isset($manifestFileInfos['css'])) {
+        foreach ($manifestFileInfos['css'] as $style) {
             add_action(
                 $hookBuild,
-                function () use ($fileSlug, $filePath) {
+                function () use ($style): void {
                     wp_enqueue_style(
-                        $fileSlug,
-                        $filePath,
+                        $style['slug'],
+                        $style['path'],
                         [],
-                        time(),
+                        '1.1.1',
                         'all'
                     );
                 },
-                21
+                $order
             );
         }
     }
+
+    $filePath = $manifestFileInfos['path'];
+    $fileSlug = $manifestFileInfos['slug'];
+
+    add_action(
+        $hookBuild,
+        function () use ($fileSlug, $filePath, $footerEnqueue, $type): void {
+            wp_register_script(
+                $fileSlug,
+                $filePath,
+                ['wp-i18n', 'jquery'],
+                '1.1.1',
+                [
+                    'in_footer' => $footerEnqueue,
+                    'strategy' => 'defer'
+                ]
+            );
+
+            wp_set_script_translations(
+                $fileSlug,
+                'simppple',
+                get_stylesheet_directory() . '/lang'
+            );
+
+            wp_localize_script(
+                $fileSlug,
+                'wpchildparams',
+                [
+                    'ajax_url' => admin_url('admin-ajax.php'),
+                    'rest_url' => esc_url_raw(get_rest_url(null, '/wp/v2')),
+                    'rest_nonce' => wp_create_nonce('wp_rest'),
+                    'template_directory' => get_stylesheet_directory_uri(),
+                    'plugins_directory' => plugins_url(),
+                    'pictures_directory' => get_stylesheet_directory_uri() . '/build/assets/img',
+                    'posts_per_page' => get_option('posts_per_page'),
+                ]
+            );
+
+            if ($type === 'module') {
+                wp_enqueue_script_module($fileSlug, $filePath);
+            } else {
+                wp_enqueue_script($fileSlug, $filePath);
+            }
+        },
+        $order
+    );
 }
 
-function simppplechild_vite_enqueue_script($fileThemePath, $hookBuild, $hookDev = false, $footerEnqueue = true) {
-    if (!$hookDev) {
-        $hookDev = $hookBuild;
-    }
+/**
+ * Enqueue editor styles
+ *
+ * @param string $fileThemePath Path to the file relative to theme root
+ * @param string $hook WordPress hook
+ * @param int $order Action priority
+ * @return void
+ */
+function enqueue_style_editor(string $fileThemePath, string $hook, int $order = 20): void {
+    $manifestFileInfos = fetch_asset_from_manifest($fileThemePath, 'script');
+    if (empty($manifestFileInfos)) {
+        echo 'Please compile (build/prod) to see the editor style';
 
-    $adminAsset = str_contains($hookBuild, 'admin') || str_contains($hookBuild, 'block') || str_contains($hookBuild, 'editor');
-    if ($adminAsset && !is_admin()) {
         return;
     }
 
-    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT === true) {
-        /*
-        * ================================ Inject assets in DOM
-        * insert script tag for scripts
-        */
-        $themePath = get_stylesheet_directory_uri();
-        $themePath = parse_url($themePath, PHP_URL_PATH);
-
-        remove_action($hookDev, 'simppplechild_vite_enqueue_dev_dependencies');
-        add_action($hookDev, 'simppplechild_vite_enqueue_dev_dependencies');
-        add_action($hookDev, function () use ($themePath, $fileThemePath) {
-            echo '<script type="module" crossorigin src="' . SIMPPPLECHILD_VITE_SERVER . $themePath . $fileThemePath . '"></script>';
-        });
-    } else {
-        /*
-        * ================================ Call assets with WP hooks
-        */
-        $manifestFileInfos = simppplechild_vite_fetch_asset_from_manifest($fileThemePath, 'script');
-        if (!empty($manifestFileInfos)) {
-            if (isset($manifestFileInfos['css'])) {
-                foreach ($manifestFileInfos['css'] as $style) {
-                    $filePath = $style['path'];
-                    $fileSlug = $style['slug'];
-                    add_action(
-                        $hookBuild,
-                        function () use ($fileSlug, $filePath) {
-                            wp_enqueue_style(
-                                $fileSlug,
-                                $filePath,
-                                [],
-                                time(),
-                                'all'
-                            );
-                        },
-                        21
-                    );
-                }
-            }
-
-            $filePath = $manifestFileInfos['path'];
-            $fileSlug = $manifestFileInfos['slug'];
-            add_action(
-                $hookBuild,
-                function () use ($fileSlug, $filePath, $footerEnqueue) {
-                    wp_register_script(
-                        $fileSlug,
-                        $filePath,
-                        [], // Libraries to use
-                        time(),
-                        [
-                            'in_footer' => $footerEnqueue,
-                            'strategy' => 'defer'
-                        ]
-                    );
-
-                    wp_set_script_translations(
-                        $fileSlug,
-                        'simppple',
-                        get_stylesheet_directory() . '/lang'
-                    );
-
-                    wp_localize_script(
-                        $fileSlug,
-                        'wpchildparams',
-                        [
-                            'ajax_url' => admin_url('admin-ajax.php'),
-                            'rest_url' => esc_url_raw(get_rest_url(null, '/wp/v2')),
-                            'rest_nonce' => wp_create_nonce('wp_rest'),
-                            'template_directory' => get_stylesheet_directory_uri(),
-                            'plugins_directory' => plugins_url(),
-                            'pictures_directory' => get_stylesheet_directory_uri() . '/build/assets/img',
-                            'posts_per_page' => get_option('posts_per_page'),
-                        ]
-                    );
-
-                    wp_enqueue_script($fileSlug);
-                },
-                21
-            );
-        }
-    }
-}
-
-function simppplechild_vite_enqueue_style_editor($fileThemePath, $hook) {
-    /*
-    * ================================ Call assets with WP hooks
-    */
-    $manifestFileInfos = simppplechild_vite_fetch_asset_from_manifest($fileThemePath, 'script');
-    if (!empty($manifestFileInfos)) {
-        $filePath = $manifestFileInfos['path'];
-
-        add_action(
-            $hook,
-            function () use ($filePath) {
-                add_editor_style($filePath);
-            },
-            21
-        );
-    } else {
-        echo 'Please compile (build/prod) to see the editor style';
-    }
+    $filePath = $manifestFileInfos['path'];
+    add_action(
+        $hook,
+        function () use ($filePath): void {
+            add_editor_style($filePath);
+        },
+        $order
+    );
 }
