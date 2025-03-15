@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Vite integration for WordPress theme
  *
@@ -120,7 +121,7 @@ function enqueue_style(string $fileThemePath, string $hookBuild, string|false $h
         return;
     }
 
-    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT === true) {
+    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT) {
         $themePath = parse_url(get_stylesheet_directory_uri(), PHP_URL_PATH);
         add_action($hookDev, function () use ($themePath, $fileThemePath): void {
             printf(
@@ -147,7 +148,7 @@ function enqueue_style(string $fileThemePath, string $hookBuild, string|false $h
                 $fileSlug,
                 $filePath,
                 [],
-                '1.1.1',
+                '1.1.2',
                 'all'
             );
         },
@@ -184,7 +185,7 @@ function enqueue_script(
         return;
     }
 
-    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT === true) {
+    if (defined('SIMPPPLECHILD_IS_VITE_DEVELOPMENT') && SIMPPPLECHILD_IS_VITE_DEVELOPMENT) {
         $themePath = parse_url(get_stylesheet_directory_uri(), PHP_URL_PATH);
 
         remove_action($hookDev, __NAMESPACE__ . '\enqueue_dev_dependencies');
@@ -214,7 +215,7 @@ function enqueue_script(
                         $style['slug'],
                         $style['path'],
                         [],
-                        '1.1.1',
+                        '1.1.2',
                         'all'
                     );
                 },
@@ -233,7 +234,7 @@ function enqueue_script(
                 $fileSlug,
                 $filePath,
                 ['wp-i18n', 'jquery'],
-                '1.1.1',
+                '1.1.2',
                 [
                     'in_footer' => $footerEnqueue,
                     'strategy' => 'defer'

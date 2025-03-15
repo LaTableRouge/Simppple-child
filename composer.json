@@ -1,25 +1,24 @@
 {
-  "authors": [
-    {
-      "name": "LaTableRouge",
-      "homepage": "https://mlnop.fr",
-      "role": "Simple man"
-    }
-  ],
-  "require-dev": {
-		"friendsofphp/php-cs-fixer": "v3.64.0",
+	"authors": [
+		{
+			"name": "LaTableRouge",
+			"homepage": "https://mlnop.fr",
+			"role": "Simple man"
+		}
+	],
+	"require-dev": {
+		"friendsofphp/php-cs-fixer": "v3.72.0",
 		"wp-cli/wp-cli-bundle": "v2.11.0",
-		"phpstan/phpstan": "^2.1",
-		"szepeviktor/phpstan-wordpress": "^2.0",
-		"squizlabs/php_codesniffer": "^3.11"
+		"phpstan/phpstan": "^2.1.8",
+		"szepeviktor/phpstan-wordpress": "v2.0.1",
+		"squizlabs/php_codesniffer": "^3.11.3"
 	},
-  "scripts": {
-    "lint:php": [
-			"vendor/bin/php-cs-fixer.bat fix -v --show-progress=dots --using-cache=no --config=.php-cs-fixer.php functions.php inc patterns blocks"
-		],
-		"phpstan": "vendor/bin/phpstan analyse --memory-limit=2048M",
+	"scripts": {
+		"prettier:php": "vendor/bin/php-cs-fixer.bat fix -v --show-progress=dots --using-cache=no --config=.php-cs-fixer.php functions.php inc patterns blocks",
+		"lint:php": "vendor/bin/phpstan analyse -v --memory-limit=2048M functions.php inc patterns blocks",
 		"lint-staged:php": [
+			"vendor/bin/phpstan analyse --memory-limit=2048M",
 			"vendor/bin/php-cs-fixer.bat fix --using-cache=no --config=.php-cs-fixer.php"
 		]
-  }
+	}
 }

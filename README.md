@@ -64,10 +64,95 @@ The list of development scripts is listed below:
 | NPM Command                | Action                                                                                                                                               |
 | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | npm run watch              | starts a local development server accessible directly on **local.your-host.com**, compiles and reloads static files (\*.scss, \*.js) on each change. |
-| npm run build               | compiles `simppple-child` theme files (\*.scss, \*.js) and deploys static files to the **build/** directory of the theme.                                  |
-| npm run beautify:all              | lints, formats theme files (\*.php, \*.scss, \*.js)      |
+| npm run build              | compiles `simppple-child` theme files (\*.scss, \*.js) and deploys static files to the **build/** directory of the theme.                            |
+| npm run beautify:all       | lints, formats theme files (\*.php, \*.scss, \*.js)                                                                                                  |
 | npm run watch:react-blocks | starts the compilation of React blocks, compiles and reloads static files (\*.scss, \*.js) on each change.                                           |
 | npm run build:react-blocks | compiles React blocks, the blocks are compiled in the **blocks/react/build/** directory of the theme.                                                |
+
+### 🐶 Husky & Git Hooks
+
+We use Husky to manage Git hooks, ensuring code quality and consistency before commits and pushes.
+
+#### Installation and Usage
+
+It is **strongly recommended** to install all dependencies with `npm install` before starting development. This will set up Husky and all necessary tools to ensure code quality.
+
+Husky will automatically run checks when you attempt to commit changes. **Important:** Commits will fail if any linting errors or code quality issues are detected. You must fix all issues before your code can be committed to the repository. This strict approach ensures that only high-quality code enters the codebase.
+
+If you need to bypass these checks in exceptional circumstances (not recommended), you can use the `--no-verify` flag with your git commit command.
+
+#### Pre-commit Hook
+
+The pre-commit hook runs automatically when you attempt to commit changes, performing the following tasks:
+
+- Runs lint-staged to process only the files that are staged for commit
+- Prevents commits if any of the checks fail
+
+#### Lint-staged Configuration
+
+Lint-staged runs specific scripts based on file types:
+
+| File Type        | Scripts Run                                                                       |
+| ---------------- | --------------------------------------------------------------------------------- |
+| \*.php           | PHP-CS-Fixer to ensure consistent formatting & PHPStan to enforce coding standard |
+| \*.scss          | Stylelint to enforce consistent styling                                           |
+| _.js, _.jsx      | ESLint to check for JavaScript errors and enforce coding standards                |
+| \*.{js,jsx,scss} | Prettier to ensure consistent formatting                                          |
+
+This ensures that all code committed to the repository meets our quality standards and maintains a consistent style.
+
+#### Git Hooks in Detail
+
+##### Pre-commit Check
+
+The pre-commit hook performs several checks before allowing a commit to proceed:
+
+1. **Code Quality Checks**: Runs lint-staged to verify that all staged files meet coding standards
+2. **Type Checking**: Ensures TypeScript files have proper type definitions
+3. **Unit Tests**: Runs relevant unit tests that might be affected by your changes
+4. **Build Verification**: Ensures the project can build successfully with your changes
+
+If any of these checks fail, the commit will be aborted, and you'll need to fix the issues before trying again.
+
+##### Branch Name Validation
+
+The branch name validation hook ensures that all branch names follow our standardized naming convention:
+
+- Format: `type/description` (e.g., `feature/add-login-page`, `fix/header-alignment`)
+- Allowed types: `feature`, `bugfix`, `fix`, `hotfix`, `release`, `chore`, `docs`, `refactor`, `test`
+- Description must use kebab-case (lowercase with hyphens)
+- No uppercase letters, underscores, or special characters allowed
+
+This standardization makes it easier to track work and understand the purpose of each branch at a glance.
+
+##### Commitlint Standard
+
+We follow the [Conventional Commits](https://www.conventionalcommits.org/) standard for commit messages, enforced by commitlint:
+
+- Format: `type(scope): subject` (e.g., `feat(auth): add login functionality`)
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+- Scope: Optional component/module name in parentheses
+- Subject: Short description in present tense, no capital first letter, no period at the end
+- Body: Optional detailed description after a blank line
+- Footer: Optional, for referencing issues (e.g., `Fixes #123`)
+
+Example of a complete commit message:
+
+```
+feat(auth): add password reset functionality
+
+Implement the password reset flow including email notification
+and secure token validation.
+
+Fixes #456
+```
+
+#### Benefits
+
+- Prevents bad code from entering the codebase
+- Maintains consistent code style across the project
+- Catches errors early in the development process
+- Reduces the need for style-related code reviews
 
 ### Overriding Gutenberg Native Blocks
 

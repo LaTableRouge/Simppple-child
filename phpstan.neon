@@ -3,10 +3,6 @@ includes:
 
 parameters:
     level: 5
-    paths:
-        - /inc/
-        - /patterns/
-        - /blocks/
     excludePaths:
         - .php-cs-fixer.php
         - vendor/*
