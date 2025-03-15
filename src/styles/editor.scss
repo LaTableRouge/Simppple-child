@@ -15,8 +15,10 @@
 // 4. Components
 
 .editor-styles-wrapper {
-	@include meta.load-css('../../blocks/core/**/scss/_block.scss');
-	@include meta.load-css('../../blocks/core/**/scss/_editor.scss');
-	@include meta.load-css('../../patterns/**/scss/_pattern.scss');
-	@include meta.load-css('../../patterns/**/scss/_editor.scss');
+  // stylelint-disable scss/load-no-partial-leading-underscore
+  @include meta.load-css('../../blocks/core/**/scss/_block.scss');
+  @include meta.load-css('../../blocks/core/**/scss/_editor.scss');
+  @include meta.load-css('../../patterns/**/scss/_pattern.scss');
+  @include meta.load-css('../../patterns/**/scss/_editor.scss');
+  // stylelint-enable scss/load-no-partial-leading-underscore
 }
