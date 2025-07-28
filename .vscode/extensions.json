@@ -1,5 +1,3 @@
 {
-    "recommendations": [
-        "antfu.file-nesting"
-    ]
+	"recommendations": ["antfu.file-nesting", "peacock.theme-peacock", "esbenp.prettier-vscode"]
 }

@@ -15,8 +15,8 @@
 // 4. Components
 
 // stylelint-disable scss/load-no-partial-leading-underscore
-@use '../../blocks/**/scss/_block.scss';
-@use '../../patterns/**/scss/_pattern.scss';
-@use '../../parts/**/scss/_part.scss';
-@use '../../templates/**/scss/_template.scss';
+@use '../../blocks/overrides/**/styles/_block.scss';
+@use '../../patterns/**/styles/_pattern.scss';
+@use '../../parts/**/styles/_part.scss';
+@use '../../templates/**/styles/_template.scss';
 // stylelint-enable scss/load-no-partial-leading-underscore

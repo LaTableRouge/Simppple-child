@@ -1,8 +1,0 @@
-includes:
-    - vendor/szepeviktor/phpstan-wordpress/extension.neon
-
-parameters:
-    level: 5
-    excludePaths:
-        - .php-cs-fixer.php
-        - vendor/*
