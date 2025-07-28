@@ -8,20 +8,20 @@
 ### File Structure
 
 - 📂 block-paragraph
-  - 📂 scss
+  - 📂 styles
     - \_block.scss
     - \_editor.scss
-  - 📂 js
+  - 📂 scripts
 
 ### Enqueue
 
 - The scss assets are automatically called using the sass glob method
-  - [front.scss](../../assets/scss/front.scss)
-  - [editor.scss](../../assets/scss/editor.scss)
+  - [front.scss](../../../src/styles/front.scss)
+  - [editor.scss](../../../src/styles/editor.scss)
 - The js assets are automatically called using the vite.js glob method
-  - [front.js](../../assets/js/front.js)
-  - [editor.js](../../assets/js/editor.js)
+  - [front.js](../../../src/scripts/front.js)
+  - [editor.js](../../../src/scripts/editor.js)
 
 ### Compilation
 
-- see [package.json](../../package.json)
+- see [package.json](../../../package.json)

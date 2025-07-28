@@ -1,9 +1,9 @@
 <?php
 
-namespace SimpppleChild\Blocks\ACF;
+namespace SimpppleChild\Blocks;
 
 /**
- * Registers ACF blocks using metadata from `block.json` files.
+ * Registers blocks using metadata from `block.json` files.
  *
  * This function registers blocks and their assets so they can be enqueued
  * through the block editor in the corresponding context.
@@ -14,9 +14,19 @@ namespace SimpppleChild\Blocks\ACF;
  * @return void
  */
 function register_acf_blocks(): void {
-    // Include all files in the block ACF folder
-    $dirpath = get_stylesheet_directory() . '/blocks/acf/';
+    /**
+     * Registers the blocks using the metadata loaded from the `block.json` files.
+     * Behind the scenes, it registers also all assets so they can be enqueued
+     * through the block editor in the corresponding context.
+     *
+     * @see https://developer.wordpress.org/reference/functions/register_block_type/
+     * @see wp-includes\blocks.php
+     */
 
+    // Include all files in the block react folder
+    $dirpath = get_stylesheet_directory() . '/build/blocks/';
+
+    $files = [];
     $files = glob($dirpath . '**/block.json');
 
     if (!empty($files)) {
@@ -48,7 +58,7 @@ function register_acf_blocks(): void {
                     foreach ($handles as $handle) {
                         wp_set_script_translations(
                             $handle,
-                            'simpple',
+                            'simppple',
                             get_stylesheet_directory() . '/lang'
                         );
                     }
