@@ -63,7 +63,7 @@ The list of development scripts is listed below:
 
 | NPM Command          | Action                                                                                                                                               |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| npm run watch        | starts a local development server accessible directly on **local.your-host.com**, compiles and reloads static files (\*.scss, \*.js) on each change. |
+| npm run watch        | compiles the theme in watch mode (`vite build --watch`) and writes assets to **build/** on each change.                                              |
 | npm run build        | compiles `simppple-child` theme files (\*.scss, \*.js) and deploys static files to the **build/** directory of the theme.                            |
 | npm run watch:blocks | starts the compilation of React blocks, compiles and reloads static files (\*.scss, \*.js) on each change.                                           |
 | npm run build:blocks | compiles React blocks, the blocks are compiled in the **blocks/react/build/** directory of the theme.                                                |

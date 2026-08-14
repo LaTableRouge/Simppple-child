@@ -1,5 +1,8 @@
 import '../styles/editor.scss' // mandatory for the Hot Module Reload
 
+// This file runs in the editor chrome (toolbar, inserter), not the iframed canvas.
+// Canvas styles: editor.scss → enqueueStyleEditor() → enqueue_block_assets.
+
 const svgIcon = wp.element.createElement(
 	'svg',
 	{
@@ -19,20 +22,3 @@ const svgIcon = wp.element.createElement(
 	})
 )
 wp.blocks.updateCategory('simppple-blocks', { icon: svgIcon })
-
-// Gutenberg ready
-if (document.querySelector('.block-editor__container')) {
-	let blocksLoaded = false
-	const blocksLoadedInterval = setInterval(function () {
-		const editorWrapper = document.querySelector('.editor-styles-wrapper')
-		if (editorWrapper) {
-			blocksLoaded = true
-
-			// DO code here
-		}
-
-		if (blocksLoaded) {
-			clearInterval(blocksLoadedInterval)
-		}
-	}, 500)
-}
