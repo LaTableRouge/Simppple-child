@@ -7,20 +7,20 @@
 		}
 	],
 	"require-dev": {
-		"friendsofphp/php-cs-fixer": "3.84.0",
+		"friendsofphp/php-cs-fixer": "3.95.18",
 		"wp-cli/wp-cli-bundle": "2.12.0",
-		"phpstan/phpstan": "^2.1.20",
-		"szepeviktor/phpstan-wordpress": "2.0.2",
-		"squizlabs/php_codesniffer": "^3.13.2",
-		"vincentlanglet/twig-cs-fixer": "^3.8.1"
+		"phpstan/phpstan": "^2.2.8",
+		"szepeviktor/phpstan-wordpress": "2.0.3",
+		"squizlabs/php_codesniffer": "^4.0.4",
+		"vincentlanglet/twig-cs-fixer": "^4.0.2"
 	},
 	"scripts": {
-		"prettier:php": "vendor/bin/php-cs-fixer.bat fix -v --show-progress=dots --using-cache=no --config=linters/.php-cs-fixer.php functions.php inc patterns blocks",
+		"prettier:php": "vendor/bin/php-cs-fixer fix -v --show-progress=dots --using-cache=no --config=linters/.php-cs-fixer.php functions.php inc patterns blocks",
 		"lint:php": "vendor/bin/phpstan --configuration=linters/phpstan.neon analyse -v --memory-limit=2048M functions.php inc patterns blocks",
 		"lint:twig": "vendor/bin/twig-cs-fixer --config=linters/.twig-cs-fixer.php --fix --no-cache lint blocks",
 		"lint-staged:php": [
 			"vendor/bin/phpstan --configuration=linters/phpstan.neon analyse --memory-limit=2048M",
-			"vendor/bin/php-cs-fixer.bat fix --using-cache=no --config=linters/.php-cs-fixer.php"
+			"vendor/bin/php-cs-fixer fix --using-cache=no --config=linters/.php-cs-fixer.php"
 		],
 		"lint-staged:twig": [
 			"vendor/bin/twig-cs-fixer --config=linters/.twig-cs-fixer.php --fix --no-cache lint blocks"

@@ -1,9 +1,14 @@
+import { dirname, resolve } from 'path'
+import { fileURLToPath } from 'url'
+
 import { stringReplaceOpenAndWrite, viteStringReplace } from '@mlnop/string-replace'
 import sassGlobImports from '@mlnop/vite-plugin-sass-glob-import'
 import autoprefixer from 'autoprefixer'
-import { resolve } from 'path'
-import { defineConfig, loadEnv } from 'vite'
+import { defineConfig } from 'vite'
 import { viteStaticCopy } from 'vite-plugin-static-copy'
+
+const chore = process.env.npm_config_chore
+const __dirname = import.meta.dirname ?? dirname(fileURLToPath(import.meta.url))
 
 /*
  |--------------------------------------------------------------------------
@@ -120,11 +125,8 @@ const filesToCopy = [
  |--------------------------------------------------------------------------
  */
 
-export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => {
+export default defineConfig(async ({ command }) => {
 	const isProduction = command === 'build'
-
-	const env = loadEnv(mode, process.cwd(), '')
-	const chore = env?.npm_config_chore
 
 	const entriesToCompile = []
 	if (entryFiles.length) {
@@ -156,8 +158,10 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 				*/
 				if (group.styles?.length) {
 					group.styles.forEach((file) => {
-						if (!entriesToCompile.includes(`${file.input}/${file.name}.scss`)) {
-							entriesToCompile.push(`${file.input}/${file.name}.scss`)
+						if (chore === undefined || chore === 'all' || chore.includes('scss')) {
+							if (!entriesToCompile.includes(`${file.input}/${file.name}.scss`)) {
+								entriesToCompile.push(`${file.input}/${file.name}.scss`)
+							}
 						}
 					})
 				}
@@ -224,7 +228,7 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 		plugins: [
 			{
 				...sassGlobImports({
-					namespace(filepath, index) {
+					namespace(filepath) {
 						const fileParts = filepath.replace('.scss', '').split('/')
 						return `${fileParts.at(-4)}-${fileParts.at(-3)}`
 					}
@@ -241,26 +245,30 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 			})
 		].filter(Boolean),
 
-		esbuild: isProduction
-			? {
-				minifyIdentifiers: false,
-				keepNames: true,
-				pure: ['console.log'],
-				reserveProps: /^__\(*$/
-			}
-			: null,
-
 		build: {
-			rollupOptions: {
+			rolldownOptions: {
 				input: entriesToCompile,
 				output: {
 					entryFileNames: 'assets/[name].js',
 					chunkFileNames: 'assets/[name].js',
-					assetFileNames: 'assets/[name].[ext]'
+					assetFileNames: 'assets/[name].[ext]',
+					keepNames: isProduction,
+					minify: isProduction
+						? {
+								mangle: false,
+								compress: {
+									dropConsole: false,
+									keepNames: {
+										function: true,
+										class: true
+									}
+								}
+							}
+						: false
 				}
 			},
 			write: true,
-			minify: isProduction ? 'esbuild' : false,
+			minify: isProduction ? 'oxc' : false,
 			outDir: distPath,
 			emptyOutDir: true,
 			manifest: true,
@@ -268,8 +276,9 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 			sourcemap: !isProduction,
 			target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
 			cssCodeSplit: true,
-			cssTarget: ['edge88', 'firefox78', 'chrome87', 'safari14']
-			// cssMinify: 'lightningcss'
+			cssMinify: isProduction,
+			cssTarget: ['edge88', 'firefox78', 'chrome87', 'safari14'],
+			chunkSizeWarningLimit: 1000
 		},
 
 		server: {
@@ -278,9 +287,7 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 			port: 5173,
 			https: false,
 			open: false,
-			hmr: {
-				host: 'localhost'
-			},
+			hmr: false,
 			watch: {
 				usePolling: true
 			}
@@ -293,7 +300,9 @@ export default defineConfig(async ({ command, isPreview, isSsrBuild, mode }) => 
 			},
 			preprocessorOptions: {
 				scss: {
-					api: 'modern-compiler'
+					// `modern-compiler` requires `sass-embedded`; this project uses `sass`.
+					api: 'modern',
+					style: isProduction ? 'compressed' : 'expanded'
 				}
 			}
 		},

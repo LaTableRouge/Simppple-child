@@ -25,13 +25,11 @@ $spacings: ();
 // Custom sizes (like the header height for example)
 $sizes: ();
 
-// Wordpress breakpoints are not to be edited saldy...
-// Here's some that I found in the code :
-//  - 600px
-//  - 782px
-//  - 960px
-//  - 1280px
-// Theses under are basic ones for more flexible responsive design
+// Viewport widths for theme.json settings.viewport (WP 7.1+, inherited from parent):
+// - mobile: 600px
+// - tablet: 782px
+// SCSS still uses extra steps for layout the 2 WP viewports cannot cover:
+// - 960px, 1280px, 1440px, 1920px
 $grid-breakpoints: (
 	xs: 0,
 	sm: 600px,

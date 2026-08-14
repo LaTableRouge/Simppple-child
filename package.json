@@ -1,6 +1,6 @@
 {
 	"name": "simppple-child",
-	"version": "1.1.3",
+	"version": "1.2.0",
 	"description": "A child theme of a simple basic gutenberg theme",
 	"main": "vite.config.mjs",
 	"keywords": [
@@ -20,7 +20,7 @@
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"watch": "vite",
+		"watch": "vite build --watch",
 		"build": "vite build",
 		"watch:blocks": "wp-scripts start --webpack-src-dir=blocks --output-path=build/blocks",
 		"build:blocks": "wp-scripts build --webpack-src-dir=blocks --output-path=build/blocks",
@@ -37,41 +37,41 @@
 		"prepare": "husky"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^19.8.0",
-		"@commitlint/config-conventional": "^19.8.0",
+		"@commitlint/cli": "^21.2.1",
+		"@commitlint/config-conventional": "^21.2.0",
 		"@mlnop/string-replace": "^2.0.0",
-		"@mlnop/vite-plugin-sass-glob-import": "^6.1.0",
-		"@wordpress/scripts": "^30.20.0",
-		"autoprefixer": "^10.4.21",
-		"browserslist": "^4.25.1",
-		"copy-webpack-plugin": "^13.0.0",
+		"@mlnop/vite-plugin-sass-glob-import": "^6.2.0",
+		"@wordpress/scripts": "^34.1.0",
+		"autoprefixer": "^10.5.4",
+		"browserslist": "^4.28.8",
+		"copy-webpack-plugin": "^14.0.0",
 		"git-precommit-checks": "^3.1.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^15.5.0",
+		"lint-staged": "^17.3.0",
 		"validate-branch-name": "^1.3.2",
-		"eslint": "^9.32.0",
+		"eslint": "^9.39.5",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-import": "^2.32.0",
-		"eslint-plugin-n": "^17.21.3",
+		"eslint-plugin-n": "^18.3.0",
 		"eslint-plugin-node": "^11.1.0",
-		"eslint-plugin-prettier": "^5.5.3",
-		"eslint-plugin-promise": "^7.2.1",
+		"eslint-plugin-prettier": "^5.5.6",
+		"eslint-plugin-promise": "^7.3.0",
 		"eslint-plugin-react": "^7.37.5",
-		"eslint-plugin-simple-import-sort": "^12.1.1",
-		"eslint-plugin-sort-destructure-keys": "^2.0.0",
-		"eslint-plugin-unused-imports": "^4.1.4",
-		"globals": "^16.3.0",
-		"markdownlint-cli2": "^0.18.1",
-		"prettier": "^3.6.2",
-		"sass": "^1.89.2",
-		"sass-loader": "^16.0.5",
-		"stylelint": "^16.22.0",
-		"stylelint-config-property-sort-order-smacss": "^10.0.0",
-		"stylelint-config-sass-guidelines": "^12.1.0",
-		"stylelint-config-standard": "^38.0.0",
-		"stylelint-order": "^7.0.0",
-		"vite": "^7.0.6",
-		"vite-plugin-static-copy": "^3.1.1"
+		"eslint-plugin-simple-import-sort": "^14.0.0",
+		"eslint-plugin-sort-destructure-keys": "^3.0.0",
+		"eslint-plugin-unused-imports": "^4.4.1",
+		"globals": "^17.11.0",
+		"markdownlint-cli2": "^0.23.2",
+		"prettier": "^3.9.6",
+		"sass": "^1.102.0",
+		"sass-loader": "^17.0.0",
+		"stylelint": "^17.14.1",
+		"stylelint-config-property-sort-order-smacss": "^11.2.0",
+		"stylelint-config-sass-guidelines": "^13.0.0",
+		"stylelint-config-standard": "^40.0.0",
+		"stylelint-order": "^8.1.1",
+		"vite": "^8.2.1",
+		"vite-plugin-static-copy": "^4.1.1"
 	},
 	"lint-staged": {
 		"**/*.twig": [
@@ -81,15 +81,18 @@
 			"composer lint-staged:php"
 		],
 		"{src/styles/**/*.scss,blocks/**/*.scss,parts/**/*.scss,patterns/**/*.scss,templates/**/*.scss}": [
-			"npx stylelint --config linters/stylelint.config.js --allow-empty-input --fix",
-			"npx prettier --config linters/prettier.config.js --no-error-on-unmatched-pattern --write",
-			"npx stylelint --config linters/stylelint.config.js --allow-empty-input --fix"
+			"npx stylelint --config linters/stylelint.config.js --ignore-path linters/.stylelintignore --allow-empty-input --fix",
+			"npx prettier --config linters/prettier.config.js --ignore-path linters/.prettierignore --no-error-on-unmatched-pattern --write",
+			"npx stylelint --config linters/stylelint.config.js --ignore-path linters/.stylelintignore --allow-empty-input --fix"
 		],
-		"{vite.config.mjs,src/scripts/**/*.js,blocks/**/*.{js,jsx},parts/**/*.js,patterns/**/*.js,templates/**/*.js}": [
-			"npx prettier --config linters/prettier.config.js --no-error-on-unmatched-pattern --write",
+		"{vite.config,src/scripts/**/*,blocks/**/*,parts/**/*,patterns/**/*,templates/**/*}.{mjs,ts,tsx,js,jsx}": [
+			"npx prettier --config linters/prettier.config.js --ignore-path linters/.prettierignore --no-error-on-unmatched-pattern --write",
 			"npx eslint --config linters/eslint.config.js --no-error-on-unmatched-pattern --fix"
 		],
 		"**/*.json": [
+			"npx prettier --config linters/prettier.config.js --ignore-path linters/.prettierignore --no-error-on-unmatched-pattern --write"
+		],
+		"**/*.yml": [
 			"npx prettier --config linters/prettier.config.js --ignore-path linters/.prettierignore --no-error-on-unmatched-pattern --write"
 		],
 		"**/*.md": [

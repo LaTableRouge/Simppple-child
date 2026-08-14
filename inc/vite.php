@@ -24,11 +24,12 @@ class Vite {
     private string $paramsName;
     private array $params;
     private string $textDomain;
+    private bool $paramsEnqueued = false;
 
     public function __construct() {
         $this->distUri = get_stylesheet_directory_uri() . '/' . self::DIST_FOLDER;
         $this->distPath = get_stylesheet_directory() . '/' . self::DIST_FOLDER;
-        $this->version = '1.1.3';
+        $this->version = '1.2.0';
         $this->paramsName = 'wpchildparams';
         $this->params = [
             'ajax_url' => admin_url('admin-ajax.php'),
@@ -216,8 +217,12 @@ class Vite {
             return;
         }
 
-        // Enqueue associated CSS files
-        if (isset($manifestFileInfos['css'])) {
+        // Canvas CSS must not ride enqueue_block_editor_assets: Gutenberg copies
+        // those sheets into the iframe via a compat layer and warns. editor.js
+        // CSS is loaded separately via enqueueStyleEditor() → enqueue_block_assets.
+        $enqueueAssociatedCss = 'enqueue_block_editor_assets' !== $hookBuild;
+
+        if ($enqueueAssociatedCss && isset($manifestFileInfos['css'])) {
             foreach ($manifestFileInfos['css'] as $style) {
                 add_action(
                     $hookBuild,
@@ -241,32 +246,62 @@ class Vite {
         add_action(
             $hookBuild,
             function () use ($fileSlug, $filePath, $footerEnqueue, $type): void {
-                wp_register_script(
-                    $fileSlug,
-                    $filePath,
-                    ['wp-i18n', 'jquery'],
-                    $this->version,
-                    [
-                        'in_footer' => $footerEnqueue,
-                        'strategy' => 'defer'
-                    ]
-                );
-
-                wp_set_script_translations(
-                    $fileSlug,
-                    $this->textDomain,
-                    get_stylesheet_directory() . '/lang'
-                );
-
-                wp_localize_script(
-                    $fileSlug,
-                    $this->paramsName,
-                    $this->params
-                );
-
                 if ($type === 'module') {
-                    wp_enqueue_script_module($fileSlug, $filePath);
+                    // Script modules cannot use wp_localize_script. Print the classic global
+                    // so existing JS (`wpchildparams`, `wp.i18n`) keeps working.
+                    wp_enqueue_script('wp-i18n');
+                    $this->enqueueParamsAsGlobal();
+
+                    wp_register_script_module(
+                        $fileSlug,
+                        $filePath,
+                        [],
+                        $this->version
+                    );
+
+                    add_filter(
+                        "script_module_data_{$fileSlug}",
+                        function (array $data) use ($fileSlug, $filePath): array {
+                            $translationsPath = get_stylesheet_directory() . '/lang';
+                            $jsonTranslations = $this->loadScriptTranslations($fileSlug, $filePath, $this->textDomain, $translationsPath);
+
+                            if ($jsonTranslations) {
+                                $data['translations'] = json_decode($jsonTranslations, true);
+                                $data['textDomain'] = $this->textDomain;
+                            }
+
+                            $data['params'] = $this->params;
+                            $data['paramsName'] = $this->paramsName;
+
+                            return $data;
+                        }
+                    );
+
+                    wp_enqueue_script_module($fileSlug);
                 } else {
+                    wp_register_script(
+                        $fileSlug,
+                        $filePath,
+                        ['wp-i18n', 'jquery'],
+                        $this->version,
+                        [
+                            'in_footer' => $footerEnqueue,
+                            'strategy' => 'defer'
+                        ]
+                    );
+
+                    wp_set_script_translations(
+                        $fileSlug,
+                        $this->textDomain,
+                        get_stylesheet_directory() . '/lang'
+                    );
+
+                    wp_localize_script(
+                        $fileSlug,
+                        $this->paramsName,
+                        $this->params
+                    );
+
                     wp_enqueue_script($fileSlug, $filePath);
                 }
             },
@@ -275,26 +310,77 @@ class Vite {
     }
 
     /**
-     * Enqueue editor styles
-     *
-     * @param string $fileThemePath Path to the file relative to theme root
-     * @param string $hook WordPress hook
-     * @param int $order Action priority
-     * @return void
+     * Print `wpchildparams` as a classic global. `wp_localize_script` does not run for script modules.
      */
-    public function enqueueStyleEditor(string $fileThemePath, string $hook, int $order = 20): void {
-        $manifestFileInfos = $this->fetchAssetFromManifest($fileThemePath, 'script');
-        if (empty($manifestFileInfos)) {
-            echo 'Please compile (build/prod) to see the editor style';
-
+    private function enqueueParamsAsGlobal(): void {
+        if ($this->paramsEnqueued) {
             return;
         }
 
-        $filePath = $manifestFileInfos['path'];
+        $this->paramsEnqueued = true;
+        $handle = 'simppplechild_vite_params';
+
+        wp_register_script($handle, '', [], $this->version, false);
+        wp_localize_script($handle, $this->paramsName, $this->params);
+        wp_enqueue_script($handle);
+    }
+
+    /**
+     * Load script translations for a given handle
+     *
+     * @param string $handle Script handle
+     * @param string $src Script source URL
+     * @param string $domain Text domain
+     * @param string $path Path to translation files
+     * @return string|false JSON-encoded translations or false on failure
+     */
+    private function loadScriptTranslations(string $handle, string $src, string $domain, string $path): string|false {
+        if (!function_exists('load_script_textdomain')) {
+            return false;
+        }
+
+        // Register a dummy (never enqueued) so load_script_textdomain() can
+        // resolve the .json file from the script src. Left registered on
+        // purpose: wp_deregister_script() trips Theme Check.
+        $tempHandle = $handle . '_temp_translations';
+        wp_register_script($tempHandle, $src, [], $this->version);
+        wp_set_script_translations($tempHandle, $domain, $path);
+
+        return load_script_textdomain($tempHandle, $domain, $path);
+    }
+
+    /**
+     * Enqueue editor canvas styles inside the iframed editor.
+     *
+     * `enqueue_block_assets` + is_admin() is the supported path. add_editor_style()
+     * and enqueue_block_editor_assets both inject via the iframe compat layer.
+     *
+     * @param string $fileThemePath Path to the file relative to theme root
+     * @param int $order Action priority
+     * @return void
+     */
+    public function enqueueStyleEditor(string $fileThemePath, int $order = 20): void {
+        $manifestFileInfos = $this->fetchAssetFromManifest($fileThemePath, 'script');
+        if (empty($manifestFileInfos['css'])) {
+            return;
+        }
+
         add_action(
-            $hook,
-            function () use ($filePath): void {
-                add_editor_style($filePath);
+            'enqueue_block_assets',
+            function () use ($manifestFileInfos): void {
+                if (!is_admin()) {
+                    return;
+                }
+
+                foreach ($manifestFileInfos['css'] as $style) {
+                    wp_enqueue_style(
+                        $style['slug'],
+                        $style['path'],
+                        [],
+                        $this->version,
+                        'all'
+                    );
+                }
             },
             $order
         );
